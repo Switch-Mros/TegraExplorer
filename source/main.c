@@ -290,10 +290,9 @@ void ipl_main()
 	_show_errors();
 
 	gfx_clearscreen();
-
+	
 	int res = -1;
 
-	
 	if (btn_read() & BTN_VOL_DOWN || DumpKeys())
 		res = GetKeysFromFile("sd:/switch/prod.keys");
 
@@ -305,11 +304,19 @@ void ipl_main()
 	if (TConf.keysDumped)
 		SetKeySlots();
 	
-	if (res == 0)
-		hidWait();
-
 	if (FileExists("sd:/startup.te"))
 		RunScript("sd:/", newFSEntry("startup.te"));
+	else if (FileExists("sd:/switch/kefir/update.te"))
+		RunScript("sd:/switch/kefir", newFSEntry("update.te"));
+	// else 
+	// 	{
+	// 		gfx_printf("\n\nStartup script not found.\nPlease redownload kefir or install it manually\n\nPress Power button for reboot...");
+	// 		hidWait()->buttons;
+	// 		launch_payload("sd:/payload.bin");
+	// 	}
+
+
+	
 
 	EnterMainMenu();
 
