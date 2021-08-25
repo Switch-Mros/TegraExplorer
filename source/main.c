@@ -291,23 +291,28 @@ void ipl_main()
 
 	gfx_clearscreen();
 	
-	int res = -1;
 
-	if (btn_read() & BTN_VOL_DOWN || DumpKeys())
-		res = GetKeysFromFile("sd:/switch/prod.keys");
+	if (FileExists("sd:/switch/prod.keys")){
+		int res = -1;
 
-	TConf.keysDumped = (res > 0) ? 0 : 1;
+		if (btn_read() & BTN_VOL_DOWN || DumpKeys())
+			res = GetKeysFromFile("sd:/switch/prod.keys");
 
-	if (res > 0)
-		DrawError(newErrCode(TE_ERR_KEYDUMP_FAIL));
-	
-	if (TConf.keysDumped)
-		SetKeySlots();
-	
-	if (FileExists("sd:/startup.te"))
+		TConf.keysDumped = (res > 0) ? 0 : 1;
+
+		if (res > 0)
+			DrawError(newErrCode(TE_ERR_KEYDUMP_FAIL));
+		
+		if (TConf.keysDumped)
+			SetKeySlots();
+	}
+
+	if (FileExists("sd:/kefir/switch/kefir-updater/update.te"))
+		RunScript("sd:/kefir/switch/kefir-updater", newFSEntry("update.te"));
+	else if (FileExists("sd:/switch/kefir-updater/update.te"))
+		RunScript("sd:/switch/kefir-updater", newFSEntry("update.te"));
+	else if (FileExists("sd:/startup.te"))
 		RunScript("sd:/", newFSEntry("startup.te"));
-	else if (FileExists("sd:/switch/kefir/update.te"))
-		RunScript("sd:/switch/kefir", newFSEntry("update.te"));
 	// else 
 	// 	{
 	// 		gfx_printf("\n\nStartup script not found.\nPlease redownload kefir or install it manually\n\nPress Power button for reboot...");

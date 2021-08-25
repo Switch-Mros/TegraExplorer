@@ -22,45 +22,56 @@
 #include <string.h>
 #include <sys/stat.h>
 
-void _DeleteFileSimple(char *thing){
+void _DeleteFileSimple(char *thing)
+{
     //char *thing = CombinePaths(path, entry.name);
     int res = f_unlink(thing);
     if (res)
         DrawError(newErrCode(res));
     free(thing);
 }
-void _RenameFileSimple(char *sourcePath, char *destPath){
+void _RenameFileSimple(char *sourcePath, char *destPath)
+{
     int res = f_rename(sourcePath, destPath);
-    if (res){
+    if (res)
+    {
         DrawError(newErrCode(res));
     }
 }
-ErrCode_t _FolderDelete(const char *path){
+ErrCode_t _FolderDelete(const char *path)
+{
     int res = 0;
     ErrCode_t ret = newErrCode(0);
     u32 x, y;
     gfx_con_getpos(&x, &y);
     Vector_t fileVec = ReadFolder(path, &res);
-    if (res){
+    if (res)
+    {
         ret = newErrCode(res);
     }
-    else {
+    else
+    {
         vecDefArray(FSEntry_t *, fs, fileVec);
-        for (int i = 0; i < fileVec.count && !ret.err; i++){
+        for (int i = 0; i < fileVec.count && !ret.err; i++)
+        {
             char *temp = CombinePaths(path, fs[i].name);
-            if (fs[i].isDir){
+            if (fs[i].isDir)
+            {
                 ret = _FolderDelete(temp);
             }
-            else {
+            else
+            {
                 res = f_unlink(temp);
-                if (res){
+                if (res)
+                {
                     ret = newErrCode(res);
-                }             
+                }
             }
             free(temp);
         }
     }
-    if (!ret.err){
+    if (!ret.err)
+    {
         res = f_unlink(path);
         if (res)
             ret = newErrCode(res);
@@ -70,186 +81,254 @@ ErrCode_t _FolderDelete(const char *path){
 }
 int _StartsWith(const char *a, const char *b)
 {
-   if(strncmp(a, b, strlen(b)) == 0) return 1;
-   return 0;
+    if (strncmp(a, b, strlen(b)) == 0)
+        return 1;
+    return 0;
 }
 
 int listdir(char *path, u32 hos_folder)
 {
-   	FRESULT res;
-	DIR dir;
-	u32 dirLength = 0;
-	static FILINFO fno;
+    FRESULT res;
+    DIR dir;
+    u32 dirLength = 0;
+    static FILINFO fno;
+
+    u32 x, y;
+    gfx_con_getpos(&x, &y);
 
     // Open directory.
-	res = f_opendir(&dir, path);
-	if (res != FR_OK)
-		return res;
+    res = f_opendir(&dir, path);
+    if (res != FR_OK)
+        return res;
 
     dirLength = strlen(path);
-	for (;;)
-	{
-		// Clear file or folder path.
-		path[dirLength] = 0;
-		// Read a directory item.
-		res = f_readdir(&dir, &fno);
-		// Break on error or end of dir.
-		if (res != FR_OK || fno.fname[0] == 0)
-			break;
-		// Skip official Nintendo dir if started from root.
-		if (!hos_folder && !strcmp(fno.fname, "Nintendo"))
-			continue;
+    for (;;)
+    {
+        // Clear file or folder path.
+        path[dirLength] = 0;
+        // Read a directory item.
+        res = f_readdir(&dir, &fno);
+        // Break on error or end of dir.
+        if (res != FR_OK || fno.fname[0] == 0)
+            break;
+        // Skip official Nintendo dir if started from root.
+        if (!hos_folder && !strcmp(fno.fname, "Nintendo"))
+            continue;
 
-		// // Set new directory or file.
-		memcpy(&path[dirLength], "/", 1);
-		memcpy(&path[dirLength + 1], fno.fname, strlen(fno.fname) + 1);
+        // // Set new directory or file.
+        memcpy(&path[dirLength], "/", 1);
+        memcpy(&path[dirLength + 1], fno.fname, strlen(fno.fname) + 1);
         // gfx_printf("THING: %s\n", fno.fname);
         // gfx_printf("Path: %s\n", dir);
         // Is it a directory?
-		if (fno.fattrib & AM_DIR)
-		{
+        if (fno.fattrib & AM_DIR)
+        {
             if (
                 strcmp(fno.fname, ".Trash") == 0 ||
                 strcmp(fno.fname, ".Trashes") == 0 ||
                 strcmp(fno.fname, ".DS_Store") == 0 ||
-                strcmp(fno.fname, ".Spotlight-V100")  == 0 ||
-                strcmp(fno.fname, ".apDisk")  == 0 ||
-                strcmp(fno.fname, ".VolumeIcon.icns")  == 0 ||
-                strcmp(fno.fname, ".fseventsd")  == 0 ||
-                strcmp(fno.fname, ".TemporaryItems")  == 0
-            ) {
+                strcmp(fno.fname, ".Spotlight-V100") == 0 ||
+                strcmp(fno.fname, ".apDisk") == 0 ||
+                strcmp(fno.fname, ".VolumeIcon.icns") == 0 ||
+                strcmp(fno.fname, ".fseventsd") == 0 ||
+                strcmp(fno.fname, ".TemporaryItems") == 0)
+            {
                 _FolderDelete(path);
+                gfx_puts_limit(path, (YLEFT - x) / 16 - 10);
+                BoxRestOfScreen();
+
+                gfx_con_setpos(x, y);
+
             }
 
-			// Enter the directory.
-			listdir(path, 0);
-			if (res != FR_OK)
-				break;
-		} else {
+            // Enter the directory.
+            listdir(path, 0);
+            if (res != FR_OK)
+                break;
+        }
+        else
+        {
             if (
                 strcmp(fno.fname, ".DS_Store") == 0 ||
-                strcmp(fno.fname, ".Spotlight-V100")  == 0 ||
-                strcmp(fno.fname, ".apDisk")  == 0 ||
-                strcmp(fno.fname, ".VolumeIcon.icns")  == 0 ||
-                strcmp(fno.fname, ".fseventsd")  == 0 ||
-                strcmp(fno.fname, ".TemporaryItems")  == 0 ||
-                _StartsWith(fno.fname, "._")
-            ) {
+                strcmp(fno.fname, ".Spotlight-V100") == 0 ||
+                strcmp(fno.fname, ".apDisk") == 0 ||
+                strcmp(fno.fname, ".VolumeIcon.icns") == 0 ||
+                strcmp(fno.fname, ".fseventsd") == 0 ||
+                strcmp(fno.fname, ".TemporaryItems") == 0 ||
+                _StartsWith(fno.fname, "._"))
+            {
                 _DeleteFileSimple(path);
+                gfx_puts_limit(path, (YLEFT - x) / 16 - 10);
+                BoxRestOfScreen();
+
+                gfx_con_setpos(x, y);
+
             }
         }
-	}
+    }
     f_closedir(&dir);
     free(path);
-	return res;
+    return res;
 }
 
-int _fix_attributes(char *path, u32 *total, u32 hos_folder, u32 check_first_run){
-	FRESULT res;
-	DIR dir;
-	u32 dirLength = 0;
-	static FILINFO fno;
+int _fix_attributes(char *path, u32 *total, u32 hos_folder, u32 check_first_run)
+{
+    FRESULT res;
+    DIR dir;
+    u32 dirLength = 0;
+    static FILINFO fno;
 
-	if (check_first_run)
-	{
-		// Read file attributes.
-		res = f_stat(path, &fno);
-		if (res != FR_OK)
-			return res;
+    u32 x, y;
+    gfx_con_getpos(&x, &y);
 
-		// Check if archive bit is set.
-		if (fno.fattrib & AM_ARC)
-		{
-			*(u32 *)total = *(u32 *)total + 1;
-			f_chmod(path, 0, AM_ARC);
-		}
-	}
+    if (check_first_run)
+    {
+        // Read file attributes.
+        res = f_stat(path, &fno);
+        if (res != FR_OK)
+            return res;
 
-	// Open directory.
-	res = f_opendir(&dir, path);
-	if (res != FR_OK)
-		return res;
+        // Check if archive bit is set.
+        if (fno.fattrib & AM_ARC)
+        {
+            *(u32 *)total = *(u32 *)total + 1;
+            f_chmod(path, 0, AM_ARC);
+        }
+    }
 
-	dirLength = strlen(path);
-	for (;;)
-	{
-		// Clear file or folder path.
-		path[dirLength] = 0;
+    // Open directory.
+    res = f_opendir(&dir, path);
+    if (res != FR_OK)
+        return res;
 
-		// Read a directory item.
-		res = f_readdir(&dir, &fno);
+    dirLength = strlen(path);
+    for (;;)
+    {
+        // Clear file or folder path.
+        path[dirLength] = 0;
 
-		// Break on error or end of dir.
-		if (res != FR_OK || fno.fname[0] == 0)
-			break;
+        // Read a directory item.
+        res = f_readdir(&dir, &fno);
 
-		// Skip official Nintendo dir if started from root.
-		if (!hos_folder && !strcmp(fno.fname, "Nintendo"))
-			continue;
+        // Break on error or end of dir.
+        if (res != FR_OK || fno.fname[0] == 0)
+            break;
 
-		// Set new directory or file.
-		memcpy(&path[dirLength], "/", 1);
-		memcpy(&path[dirLength + 1], fno.fname, strlen(fno.fname) + 1);
+        // Skip official Nintendo dir if started from root.
+        if (!hos_folder && (!strcmp(fno.fname, "Nintendo") || !strcmp(fno.fname, "roms") || !strcmp(fno.fname, "contents")))
+            continue;
 
-		// Check if archive bit is set.
-		if (fno.fattrib & AM_ARC)
-		{
-			*total = *total + 1;
-			f_chmod(path, 0, AM_ARC);
-		}
+        // Set new directory or file.
+        memcpy(&path[dirLength], "/", 1);
+        memcpy(&path[dirLength + 1], fno.fname, strlen(fno.fname) + 1);
 
-		// Is it a directory?
-		if (fno.fattrib & AM_DIR)
-		{
-			// Set archive bit to NCA folders.
-			if (hos_folder && !strcmp(fno.fname + strlen(fno.fname) - 4, ".nca"))
-			{
-				*total = *total + 1;
-				f_chmod(path, AM_ARC, AM_ARC);
-			}
+        // Check if archive bit is set.
+        if (fno.fattrib & AM_ARC)
+        {
+            *total = *total + 1;
+            // gfx_printf("%s\n", path);
+            gfx_puts_limit(path, (YLEFT - x) / 16 - 10);
+            BoxRestOfScreen();
 
-			// Enter the directory.
-			res = _fix_attributes(path, total, hos_folder, 0);
-			if (res != FR_OK)
-				break;
-		}
-	}
+            gfx_con_setpos(x, y);
+            // gfx_clearscreen();
+            f_chmod(path, 0, AM_ARC);
+        }
 
-	f_closedir(&dir);
+        // Is it a directory?
+        if (fno.fattrib & AM_DIR)
+        {
+            // Set archive bit to NCA folders.
+            if (hos_folder && !strcmp(fno.fname + strlen(fno.fname) - 4, ".nca"))
+            {
+                *total = *total + 1;
+                // gfx_printf("%s\n", path);
+                gfx_puts_limit(path, (YLEFT - x) / 16 - 10);
+                BoxRestOfScreen();
 
-	return res;
+                gfx_con_setpos(x, y);
+                // gfx_clearscreen();
+                f_chmod(path, AM_ARC, AM_ARC);
+            }
+
+            // Enter the directory.
+            res = _fix_attributes(path, total, hos_folder, 0);
+            if (res != FR_OK)
+                break;
+        }
+    }
+
+    f_closedir(&dir);
+
+    return res;
 }
 
-
-void m_entry_fixArchiveBit(u32 type){
+void m_entry_fixArchiveBit(u32 type)
+{
 
     char path[256];
-	char label[16];
+    char label[16];
 
-	u32 total = 0;
-	if (sd_mount())
-	{
-		switch (type)
-		{
-		case 0:
-			strcpy(path, "/");
-			strcpy(label, "SD Card");
-			break;
-		case 1:
-		default:
-			strcpy(path, "/Nintendo");
-			strcpy(label, "Nintendo folder");
-			break;
-		}
+    u32 total = 0;
+    if (sd_mount())
+    {
+        // strcpy(path, "/");
+        // strcpy(label, "SD Card");
+        // gfx_printf("Traversing \"%s\"..\nThis may take some time...\n\n", label);
+        // _fix_attributes(path, &total, type, type);
 
-		gfx_printf("Traversing all %s files!\nThis may take some time...\n\n", label);
-		_fix_attributes(path, &total, type, type);
-		gfx_printf("%kTotal archive bits cleared: %d!%k", 0xFF96FF00, total, 0xFFCCCCCC);
-	}
+        strcpy(path, "atmosphere");
+        strcpy(label, "atmosphere");
+        gfx_printf("Fixing attributes. This may take some time...", label);
+        gfx_printf("\nTraversing \"%k%s%k\"..\n\n", 0xFF96FF00, label, 0xFFCCCCCC);
+        _fix_attributes(path, &total, type, type);
+        gfx_clearscreen();
+        total = total + total;
+
+        strcpy(path, "bootloader");
+        strcpy(label, "bootloader");
+        gfx_printf("\nTraversing \"%k%s%k\"..\n\n", 0xFF96FF00, label, 0xFFCCCCCC);
+        _fix_attributes(path, &total, type, type);
+        gfx_clearscreen();
+        total = total + total;
+
+
+        strcpy(path, "switch");
+        strcpy(label, "switch");
+        gfx_printf("\nTraversing \"%k%s%k\"..\n\n", 0xFF96FF00, label, 0xFFCCCCCC);
+        _fix_attributes(path, &total, type, type);
+        gfx_clearscreen();
+        total = total + total;
+
+        strcpy(path, "config");
+        strcpy(label, "config");
+        gfx_printf("\nTraversing \"%k%s%k\"..\n\n", 0xFF96FF00, label, 0xFFCCCCCC);
+        _fix_attributes(path, &total, type, type);
+        gfx_clearscreen();
+        total = total + total;
+
+        strcpy(path, "firmware");
+        strcpy(label, "firmware");
+        gfx_printf("\nTraversing \"%k%s%k\"..\n\n", 0xFF96FF00, label, 0xFFCCCCCC);
+        _fix_attributes(path, &total, type, type);
+        gfx_clearscreen();
+        total = total + total;
+
+        strcpy(path, "sept");
+        strcpy(label, "sept");
+        gfx_printf("\nTraversing \"%k%s%k\"..\n\n", 0xFF96FF00, label, 0xFFCCCCCC);
+        _fix_attributes(path, &total, type, type);
+        gfx_clearscreen();
+        total = total + total;
+    }
+
+    gfx_clearscreen();
+    gfx_printf("%kTotal archive bits cleared: %d!%k", 0xFF96FF00, total, 0xFFCCCCCC);
 }
 
 
-void m_entry_fixAIOUpdate(){
+void m_entry_fixAIOUpdate()
+{
     gfx_clearscreen();
     gfx_printf("\n\n-- Fix broken Switch-AiO-Updater update.\n\n");
 
@@ -261,9 +340,11 @@ void m_entry_fixAIOUpdate(){
     char *o_p_path = CpyStr("sd:/sept/payload.bin");
     char *o_strt_path = CpyStr("sd:/atmosphere/stratosphere.romfs");
 
-    if (FileExists(aio_fs_path)) {
+    if (FileExists(aio_fs_path))
+    {
         gfx_printf("Detected aio updated fusee-secondary file -> replacing original\n\n");
-        if (FileExists(o_fs_path)) {
+        if (FileExists(o_fs_path))
+        {
             _DeleteFileSimple(o_fs_path);
         }
         _RenameFileSimple(aio_fs_path, o_fs_path);
@@ -271,9 +352,11 @@ void m_entry_fixAIOUpdate(){
     free(aio_fs_path);
     free(o_fs_path);
 
-    if (FileExists(aio_p_path)) {
+    if (FileExists(aio_p_path))
+    {
         gfx_printf("Detected aio updated paload file -> replacing original\n\n");
-        if (FileExists(o_p_path)) {
+        if (FileExists(o_p_path))
+        {
             _DeleteFileSimple(o_p_path);
         }
         _RenameFileSimple(aio_p_path, o_p_path);
@@ -281,22 +364,21 @@ void m_entry_fixAIOUpdate(){
     free(aio_p_path);
     free(o_p_path);
 
-    if (FileExists(aio_strt_path)) {
+    if (FileExists(aio_strt_path))
+    {
         gfx_printf("Detected aio updated stratosphere file -> replacing original\n\n");
-        if (FileExists(o_strt_path)) {
+        if (FileExists(o_strt_path))
+        {
             _DeleteFileSimple(o_strt_path);
         }
         _RenameFileSimple(aio_strt_path, o_strt_path);
     }
     free(aio_strt_path);
     free(o_strt_path);
-
-
-    
-    
 }
 
-void m_entry_fixClingWrap(){
+void m_entry_fixClingWrap()
+{
     gfx_clearscreen();
     gfx_printf("\n\n-- Fixing ClingWrap.\n\n");
     char *bpath = CpyStr("sd:/_b0otloader");
@@ -307,33 +389,41 @@ void m_entry_fixClingWrap(){
     char *ppath = CpyStr("sd:/bootloader/_patchesCW.ini");
     char *popath = CpyStr("sd:/atmosphere/patches.ini");
 
-    if (FileExists(bpath)) {
-        if (FileExists(bopath)) {
+    if (FileExists(bpath))
+    {
+        if (FileExists(bopath))
+        {
             FolderDelete(bopath);
         }
         int res = f_rename(bpath, bopath);
-        if (res){
+        if (res)
+        {
             DrawError(newErrCode(res));
         }
         gfx_printf("-- Fixed Bootloader\n");
     }
 
-    if (FileExists(kpath)) {
-        if (FileExists(kopath)) {
+    if (FileExists(kpath))
+    {
+        if (FileExists(kopath))
+        {
             FolderDelete(kopath);
         }
         int res = f_rename(kpath, kopath);
-        if (res){
+        if (res)
+        {
             DrawError(newErrCode(res));
         }
         gfx_printf("-- Fixed kips\n");
     }
 
-    if (FileExists(ppath)) {
-        if (FileExists(popath)) {
+    if (FileExists(ppath))
+    {
+        if (FileExists(popath))
+        {
             _DeleteFileSimple(popath);
         }
-        _RenameFileSimple(ppath,popath);
+        _RenameFileSimple(ppath, popath);
         gfx_printf("-- Fixed patches.ini\n");
     }
 
@@ -343,63 +433,64 @@ void m_entry_fixClingWrap(){
     free(kopath);
     free(ppath);
     free(popath);
-
-    
-    
 }
 
-void _deleteTheme(char* basePath, char* folderId){
+void _deleteTheme(char *basePath, char *folderId)
+{
     char *path = CombinePaths(basePath, folderId);
-    if (FileExists(path)) {
+    if (FileExists(path))
+    {
         gfx_printf("-- Theme found: %s\n", path);
         FolderDelete(path);
     }
     free(path);
 }
 
-void m_entry_deleteInstalledThemes(){
+void m_entry_deleteInstalledThemes()
+{
     gfx_clearscreen();
     gfx_printf("\n\n-- Deleting installed themes.\n\n");
     _deleteTheme("sd:/atmosphere/contents", "0100000000001000");
     _deleteTheme("sd:/atmosphere/contents", "0100000000001007");
     _deleteTheme("sd:/atmosphere/contents", "0100000000001013");
-
-    
-    
 }
 
-void m_entry_deleteBootFlags(){
+void m_entry_deleteBootFlags()
+{
     gfx_clearscreen();
     gfx_printf("\n\n-- Disabling automatic sysmodule startup.\n\n");
     char *storedPath = CpyStr("sd:/atmosphere/contents");
     int readRes = 0;
     Vector_t fileVec = ReadFolder(storedPath, &readRes);
-    if (readRes){
+    if (readRes)
+    {
         clearFileVector(&fileVec);
         DrawError(newErrCode(readRes));
-    } else {
-        vecDefArray(FSEntry_t*, fsEntries, fileVec);
-        for (int i = 0; i < fileVec.count; i++){
+    }
+    else
+    {
+        vecDefArray(FSEntry_t *, fsEntries, fileVec);
+        for (int i = 0; i < fileVec.count; i++)
+        {
 
             char *suf = "/flags/boot2.flag";
             char *flagPath = CombinePaths(storedPath, fsEntries[i].name);
             flagPath = CombinePaths(flagPath, suf);
 
-            if (FileExists(flagPath)) {
+            if (FileExists(flagPath))
+            {
                 gfx_printf("Deleting: %s\n", flagPath);
                 _DeleteFileSimple(flagPath);
             }
             free(flagPath);
         }
     }
-    
-    
 }
 
-void m_entry_fixMacSpecialFolders(){
+void m_entry_fixMacSpecialFolders()
+{
     listdir("/", 0);
-    
-    
+
     // browse path
     // list files & folders
     // if file -> delete
@@ -407,7 +498,8 @@ void m_entry_fixMacSpecialFolders(){
     //      if folder m_entry_fixMacSpecialFolders with new path
 }
 
-void m_entry_stillNoBootInfo(){
+void m_entry_stillNoBootInfo()
+{
     gfx_clearscreen();
     gfx_printf("\n\n-- My switch still does not boot.\n\n");
 
@@ -419,24 +511,21 @@ void m_entry_stillNoBootInfo(){
 
     gfx_printf("%kDid you just buy a new SD-card?\n", COLOR_WHITE);
     gfx_printf("Make sure its not a fake card.\n\n");
-
-    
-    
 }
 
-void m_entry_ViewCredits(){
+void m_entry_ViewCredits()
+{
     gfx_clearscreen();
     gfx_printf("\nCommon Problem Resolver v%d.%d.%d\nBy Team Neptune\n\nBased on TegraExplorer by SuchMemeManySkill,\nLockpick_RCM & Hekate, from shchmue & CTCaer\n\n\n", LP_VER_MJ, LP_VER_MN, LP_VER_BF);
-    
 }
 
-void m_entry_fixAll(){
+void m_entry_fixAll()
+{
     gfx_clearscreen();
     m_entry_deleteBootFlags();
     m_entry_deleteInstalledThemes();
     m_entry_fixClingWrap();
     m_entry_fixAIOUpdate();
-
 
     m_entry_stillNoBootInfo();
 }
