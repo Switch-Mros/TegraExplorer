@@ -133,11 +133,11 @@ int listdir(char *path, u32 hos_folder)
                 strcmp(fno.fname, ".fseventsd") == 0 ||
                 strcmp(fno.fname, ".TemporaryItems") == 0)
             {
-                _FolderDelete(path);
                 gfx_puts_limit(path, (YLEFT - x) / 16 - 10);
                 BoxRestOfScreen();
 
                 gfx_con_setpos(x, y);
+                _FolderDelete(path);
 
             }
 
@@ -157,11 +157,11 @@ int listdir(char *path, u32 hos_folder)
                 strcmp(fno.fname, ".TemporaryItems") == 0 ||
                 _StartsWith(fno.fname, "._"))
             {
-                _DeleteFileSimple(path);
                 gfx_puts_limit(path, (YLEFT - x) / 16 - 10);
                 BoxRestOfScreen();
 
                 gfx_con_setpos(x, y);
+                _DeleteFileSimple(path);
 
             }
         }
@@ -314,8 +314,8 @@ void m_entry_fixArchiveBit(u32 type)
         gfx_clearscreen();
         total = total + total;
 
-        strcpy(path, "sept");
-        strcpy(label, "sept");
+        strcpy(path, "emummc");
+        strcpy(label, "emummc");
         gfx_printf("\nTraversing \"%k%s%k\"..\n\n", 0xFF96FF00, label, 0xFFCCCCCC);
         _fix_attributes(path, &total, type, type);
         gfx_clearscreen();
