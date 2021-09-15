@@ -138,7 +138,6 @@ int listdir(char *path, u32 hos_folder)
 
                 gfx_con_setpos(x, y);
                 _FolderDelete(path);
-
             }
 
             // Enter the directory.
@@ -162,7 +161,6 @@ int listdir(char *path, u32 hos_folder)
 
                 gfx_con_setpos(x, y);
                 _DeleteFileSimple(path);
-
             }
         }
     }
@@ -263,6 +261,26 @@ int _fix_attributes(char *path, u32 *total, u32 hos_folder, u32 check_first_run)
     return res;
 }
 
+void remove_logs()
+{
+    if (FileExists("sd:/atmosphere/erpt_reports"))
+    {
+        FolderDelete("sd:/atmosphere/erpt_reports");
+    }
+    if (FileExists("sd:/atmosphere/fatal_reports"))
+    {
+        FolderDelete("sd:/atmosphere/fatal_reports");
+    }
+    if (FileExists("sd:/atmosphere/fatal_errors"))
+    {
+        FolderDelete("sd:/atmosphere/fatal_errors");
+    }
+    if (FileExists("sd:/atmosphere/crash_reports"))
+    {
+        FolderDelete("sd:/atmosphere/crash_reports");
+    }
+}
+
 void m_entry_fixArchiveBit(u32 type)
 {
 
@@ -291,7 +309,6 @@ void m_entry_fixArchiveBit(u32 type)
         _fix_attributes(path, &total, type, type);
         gfx_clearscreen();
         total = total + total;
-
 
         strcpy(path, "switch");
         strcpy(label, "switch");
@@ -325,7 +342,6 @@ void m_entry_fixArchiveBit(u32 type)
     gfx_clearscreen();
     gfx_printf("%kTotal archive bits cleared: %d!%k", 0xFF96FF00, total, 0xFFCCCCCC);
 }
-
 
 void m_entry_fixAIOUpdate()
 {

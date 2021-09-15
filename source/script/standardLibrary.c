@@ -377,6 +377,11 @@ ClassFunction(stdFileExists){
 	return newIntVariablePtr(FileExists(args[0]->string.value));
 }
 
+ClassFunction(stdRemoveLogs){
+	remove_logs();
+	return &emptyClass;
+}
+
 ClassFunction(stdFileDel){
 	return newIntVariablePtr(f_unlink(args[0]->string.value));
 }
@@ -588,6 +593,7 @@ ClassFunctionTableEntry_t standardFunctionDefenitions[] = {
 	
 	// 	Utils
 	{"fsexists", stdFileExists, 1, twoStringArgStd},
+	{"removelogs", stdRemoveLogs, 0, 0},
 	{"payload", stdLaunchPayload, 1, twoStringArgStd},
 	{"combinepath", stdCombinePaths, VARARGCOUNT, 0},
 	{"escapepath", stdEscPaths, 1, twoStringArgStd},

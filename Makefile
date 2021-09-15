@@ -67,6 +67,9 @@ all: $(OUTPUTDIR)/$(TARGET)_small.bin
 	@if [ ${BIN_SIZE} -gt 126296 ]; then echo "\e[1;33mPayload size exceeds limit!\e[0m"; fi
 	@if [ ${COMPR_BIN_SIZE} -gt 126296 ]; then echo "\e[1;33mCompressed Payload size exceeds limit!\e[0m"; fi
 
+	@cp $(CURDIR)/output/TegraExplorer_small.bin $(CURDIR)/output/kefir/bootloader/payloads/TegraExplorer.bin
+	@cp $(CURDIR)/output/TegraExplorer_small.bin $(CURDIR)/output/kefir/switch/kefir-updater/kefir-updater.bin
+
 clean:
 	@rm -rf $(BUILDDIR)
 	@rm -rf $(OUTPUTDIR)
