@@ -213,7 +213,7 @@ int _fix_attributes(char *path, u32 *total, u32 hos_folder, u32 check_first_run)
             break;
 
         // Skip official Nintendo dir if started from root.
-        if (!hos_folder && (!strcmp(fno.fname, "Nintendo") || !strcmp(fno.fname, "roms") || !strcmp(fno.fname, "contents")))
+        if (!hos_folder && (!strcmp(fno.fname, "Nintendo") || !strcmp(fno.fname, "roms") || !strcmp(fno.fname, "contents") || !strcmp(fno.fname, "erpt_reports") || !strcmp(fno.fname, "fatal_reports") || !strcmp(fno.fname, "fatal_errors") || !strcmp(fno.fname, "crash_reports")))
             continue;
 
         // Set new directory or file.
@@ -259,26 +259,6 @@ int _fix_attributes(char *path, u32 *total, u32 hos_folder, u32 check_first_run)
     f_closedir(&dir);
 
     return res;
-}
-
-void remove_logs()
-{
-    if (FileExists("sd:/atmosphere/erpt_reports"))
-    {
-        FolderDelete("sd:/atmosphere/erpt_reports");
-    }
-    if (FileExists("sd:/atmosphere/fatal_reports"))
-    {
-        FolderDelete("sd:/atmosphere/fatal_reports");
-    }
-    if (FileExists("sd:/atmosphere/fatal_errors"))
-    {
-        FolderDelete("sd:/atmosphere/fatal_errors");
-    }
-    if (FileExists("sd:/atmosphere/crash_reports"))
-    {
-        FolderDelete("sd:/atmosphere/crash_reports");
-    }
 }
 
 void m_entry_fixArchiveBit(u32 type)
@@ -532,7 +512,7 @@ void m_entry_stillNoBootInfo()
 void m_entry_ViewCredits()
 {
     gfx_clearscreen();
-    gfx_printf("\nCommon Problem Resolver v%d.%d.%d\nBy Team Neptune\n\nBased on TegraExplorer by SuchMemeManySkill,\nLockpick_RCM & Hekate, from shchmue & CTCaer\n\n\n", LP_VER_MJ, LP_VER_MN, LP_VER_BF);
+    gfx_printf("\nCommon Problem Resolver v%d.%d.%d.%d\nBy Team Neptune\n\nBased on TegraExplorer by SuchMemeManySkill,\nLockpick_RCM & Hekate, from shchmue & CTCaer\n\n\n", LP_VER_MJ, LP_VER_MN, LP_VER_BF, LP_VER_KEF);
 }
 
 void m_entry_fixAll()

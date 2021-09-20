@@ -7,4 +7,5 @@
 
 ErrCode_t FileCopy(const char *locin, const char *locout, u8 options);
 ErrCode_t FolderDelete(const char *path);
+ErrCode_t SilentDelete(const char *path);
 ErrCode_t FolderCopy(const char *locin, const char *locout);

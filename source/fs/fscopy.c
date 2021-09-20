@@ -189,3 +189,40 @@ ErrCode_t FolderDelete(const char *path){
     clearFileVector(&fileVec);
     return ret;
 }
+
+ErrCode_t SilentDelete(const char *path){
+    int res = 0;
+    ErrCode_t ret = newErrCode(0);
+
+
+    Vector_t fileVec = ReadFolder(path, &res);
+    if (res){
+        ret = newErrCode(res);
+    }
+    else {
+        vecDefArray(FSEntry_t *, fs, fileVec);
+
+        for (int i = 0; i < fileVec.count && !ret.err; i++){
+            char *temp = CombinePaths(path, fs[i].name);
+            if (fs[i].isDir){
+                ret = SilentDelete(temp);
+            }
+            else {
+                res = f_unlink(temp);
+                if (res){
+                    ret = newErrCode(res);
+                }
+            }
+            free(temp);
+        }
+    }
+
+    if (!ret.err){
+        res = f_unlink(path);
+        if (res)
+            ret = newErrCode(res);
+    }
+
+    clearFileVector(&fileVec);
+    return ret;
+}
