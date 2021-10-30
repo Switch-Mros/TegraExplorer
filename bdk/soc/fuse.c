@@ -121,6 +121,12 @@ u32 fuse_read_hw_type()
 	return FUSE_NX_HW_TYPE_ICOSA;
 }
 
+bool is_erista() {
+	if (fuse_read_hw_type() == FUSE_NX_HW_TYPE_ICOSA)
+		return HW_ERISTA;
+	return HW_MARIKO;
+}
+
 u8 fuse_count_burnt(u32 val)
 {
 	u8 burnt_fuses = 0;
