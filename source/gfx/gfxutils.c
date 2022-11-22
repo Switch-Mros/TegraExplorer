@@ -13,7 +13,7 @@ void gfx_printTopInfo() {
 	bq24193_get_property(BQ24193_ChargeStatus, &current_charge_status);
     SETCOLOR(COLOR_DEFAULT, COLOR_WHITE);
     gfx_con_setpos(0, 0);
-    gfx_printf("Tegraexplorer %d.%d.%d.%d | Battery: %d%% %c\n", LP_VER_MJ, LP_VER_MN, LP_VER_BF, LP_VER_KEF, battery >> 8, ((current_charge_status) ? 129 : 32));
+    gfx_printf("Tegraexplorer %d.%d.%d.%d | Akku: %d%% %c\n", LP_VER_MJ, LP_VER_MN, LP_VER_BF, LP_VER_KEF, battery >> 8, ((current_charge_status) ? 129 : 32));
     RESETCOLOR;
 }
 
@@ -28,8 +28,8 @@ void gfx_clearscreen(){
 }
 
 MenuEntry_t YesNoEntries[] = {
-    {.optionUnion = COLORTORGB(COLOR_YELLOW), .name = "No"},
-    {.R = 255, .name = "Yes"}
+    {.optionUnion = COLORTORGB(COLOR_YELLOW), .name = "Nein"},
+    {.R = 255, .name = "Ja"}
 };
 
 int MakeYesNoHorzMenu(int spacesBetween, u32 bg){

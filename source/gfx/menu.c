@@ -72,7 +72,7 @@ int newMenu(Vector_t* vec, int startIndex, int screenLenX, int screenLenY, u8 op
             if (options & ENABLEPAGECOUNT){
                 SETCOLOR(COLOR_DEFAULT, COLOR_WHITE);
                 char temp[40] = "";
-                s_printf(temp, " Page %d / %d | Total %d entries", (selected / screenLenY) + 1, ((vec->count - 1) / screenLenY) + 1, entryCount);
+                s_printf(temp, " Seite %d / %d | Insgesamt %d Eintraege", (selected / screenLenY) + 1, ((vec->count - 1) / screenLenY) + 1, entryCount);
                 gfx_con_setpos(YLEFT - strlen(temp) * 18, 0);
                 gfx_printf(temp);
             }
@@ -106,7 +106,7 @@ int newMenu(Vector_t* vec, int startIndex, int screenLenX, int screenLenY, u8 op
 
         SETCOLOR(COLOR_DEFAULT, COLOR_WHITE);
         gfx_con_setpos(0, 704);
-        gfx_printf("Time taken for screen draw: %dms  ", get_tmr_ms() - lastDraw);
+        gfx_printf("Benoetigte Zeit fuer Bildschirmaufbau: %dms  ", get_tmr_ms() - lastDraw);
         
         while(hidRead()){
             if (!(input->buttons)){
