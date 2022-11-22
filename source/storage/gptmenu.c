@@ -17,8 +17,8 @@
 #include "../utils/utils.h"
 
 MenuEntry_t GptMenuHeader[] = {
-    {.optionUnion = COLORTORGB(COLOR_ORANGE), .name = "<- Back"},
-    {.optionUnion = COLORTORGB(COLOR_GREY) | SKIPBIT, .name = "Clipboard -> Partition\n"},
+    {.optionUnion = COLORTORGB(COLOR_ORANGE), .name = "<- Zurueck"},
+    {.optionUnion = COLORTORGB(COLOR_GREY) | SKIPBIT, .name = "Zwischenablage -> Partition\n"},
     {.optionUnion = COLORTORGB(COLOR_BLUE), .name = "BOOT0", .icon = 128, .showSize = 1, .size = 4, .sizeDef = 2}, 
     {.optionUnion = COLORTORGB(COLOR_BLUE), .name = "BOOT1", .icon = 128, .showSize = 1, .size = 4, .sizeDef = 2} 
 };
@@ -84,17 +84,17 @@ void GptMenu(u8 MMCType){
             gfx_clearscreen();
             char *fileName = CpyStr(strrchr(TConf.srcCopy, '/') + 1);
 
-            gfx_printf("Are you sure you want to flash %s?  ", fileName);
+            gfx_printf("Sicher das du %s flashen willst?  ", fileName);
             if (MakeYesNoHorzMenu(3, COLOR_DEFAULT)){
                 RESETCOLOR;
-                gfx_printf("\nFlashing %s... ", fileName);
+                gfx_printf("\nFlashe %s... ", fileName);
                 ErrCode_t a = DumpOrWriteEmmcPart(TConf.srcCopy, fileName, 1, 0);
                 if (a.err){
                     if (a.err == TE_WARN_FILE_TOO_SMALL_FOR_DEST){
-                        gfx_printf("\r%s is too small for the destination. Flash anyway?  ", fileName);
+                        gfx_printf("\r%s ist zu klein als Ziel. Trotzdem flashen?  ", fileName);
                         if (MakeYesNoHorzMenu(3, COLOR_DEFAULT)){
                             RESETCOLOR;
-                            gfx_printf("\nFlashing %s... ", fileName);
+                            gfx_printf("\nFlashe %s... ", fileName);
                             a = DumpOrWriteEmmcPart(TConf.srcCopy, fileName, 1, 1);
                         }
                         else {
@@ -125,11 +125,11 @@ void GptMenu(u8 MMCType){
                 continue;
 
             gfx_clearscreen();
-            gfx_printf("Do you want to dump %s?  ", entries[res].name);
+            gfx_printf("Moechtest du %s dumpen?  ", entries[res].name);
             if (MakeYesNoHorzMenu(3, COLOR_DEFAULT)){
                 gfx_putc('\n');
                 RESETCOLOR;
-                gfx_printf("Dumping %s... ", entries[res].name);
+                gfx_printf("Dumpe %s... ", entries[res].name);
 
                 f_mkdir("sd:/tegraexplorer");
                 f_mkdir("sd:/tegraexplorer/Dumps");
@@ -139,10 +139,10 @@ void GptMenu(u8 MMCType){
                 ErrCode_t a = DumpOrWriteEmmcPart(path, entries[res].name, 0, 0);
                 if (a.err){
                     if (a.err == TE_WARN_FILE_EXISTS){
-                        gfx_printf("\rDest file for %s exists already. Overwrite?  ", entries[res].name);
+                        gfx_printf("\rZieldatei fuer %s existiert bereits. Ueberschreiben?  ", entries[res].name);
                         if (MakeYesNoHorzMenu(3, COLOR_DEFAULT)){
                             RESETCOLOR;
-                            gfx_printf("\nDumping %s... ", entries[res].name);
+                            gfx_printf("\nDumpe %s... ", entries[res].name);
                             a = DumpOrWriteEmmcPart(path, entries[res].name, 0, 1);
                         }
                         else {
