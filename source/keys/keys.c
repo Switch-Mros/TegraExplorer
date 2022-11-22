@@ -145,7 +145,7 @@ static int _derive_master_keys_from_keyblobs(key_derivation_ctx_t *keys) {
     se_aes_key_set(9, keys->sbk, 0x10);
 
     if (!emummc_storage_read(&emmc_storage, KEYBLOB_OFFSET / NX_EMMC_BLOCKSIZE, KB_FIRMWARE_VERSION_600 + 1, keyblob_block)) {
-        DPRINTF("Unable to read keyblobs.");
+        DPRINTF("Keyblobs konnten nicht gelesen werden.");
     }
 
     se_aes_crypt_block_ecb(8, 0, keys->keyblob_key, keyblob_key_source); // temp = unwrap(kbks, tsec)
@@ -178,7 +178,7 @@ static int _derive_master_keys_from_keyblobs(key_derivation_ctx_t *keys) {
 static bool _derive_tsec_keys(tsec_ctxt_t *tsec_ctxt, u32 kb, key_derivation_ctx_t *keys) {
     tsec_ctxt->fw = _find_tsec_fw(tsec_ctxt->pkg1);
     if (!tsec_ctxt->fw) {
-        DPRINTF("Unable to locate TSEC firmware.");
+        DPRINTF("TSEC-Firmware kann nicht lokalisiert werden.");
         return false;
     }
 
@@ -186,7 +186,7 @@ static bool _derive_tsec_keys(tsec_ctxt_t *tsec_ctxt, u32 kb, key_derivation_ctx
 
     tsec_ctxt->size = _get_tsec_fw_size((tsec_key_data_t *)(tsec_ctxt->fw + TSEC_KEY_DATA_OFFSET));
     if (tsec_ctxt->size > PKG1_MAX_SIZE) {
-        DPRINTF("Unexpected TSEC firmware size.");
+        DPRINTF("Unerwartete Groesse der TSEC-Firmware.");
         return false;
     }
 
@@ -228,22 +228,22 @@ static ALWAYS_INLINE u8 *_read_pkg1(const pkg1_id_t **pkg1_id) {
     // Read package1.
     u8 *pkg1 = (u8 *)malloc(PKG1_MAX_SIZE);
     if (!emummc_storage_set_mmc_partition(&emmc_storage, EMMC_BOOT0)) {
-        DPRINTF("Unable to set partition.");
+        DPRINTF("Partition kann nicht festgelegt werden.");
         return NULL;
     }
     if (!emummc_storage_read(&emmc_storage, PKG1_OFFSET / NX_EMMC_BLOCKSIZE, PKG1_MAX_SIZE / NX_EMMC_BLOCKSIZE, pkg1)) {
-        DPRINTF("Unable to read pkg1.");
+        DPRINTF("pkg1 konnte nicht gelesen werden.");
         return NULL;
     }
 
     u32 pk1_offset = h_cfg.t210b01 ? sizeof(bl_hdr_t210b01_t) : 0; // Skip T210B01 OEM header.
     *pkg1_id = pkg1_identify(pkg1 + pk1_offset);
     if (!*pkg1_id) {
-        DPRINTF("Unknown pkg1 version.\n Make sure you have the latest Lockpick_RCM.\n If a new firmware version just came out,\n Lockpick_RCM must be updated.\n Check Github for new release.");
+        DPRINTF("Unbekannte pkg1 Version.\n Stelle sicher das du die neueste Lockpick_RCM hast.\n Wenn gerade eine neue Firmware erschienen ist,\n muss Lockpick_RCM aktualisiert werden.\n Schau auf Github nach einem neuen Release.");
         //gfx_hexdump(0, pkg1 + pk1_offset, 0x20);
         char pkg1txt[16] = {0};
         memcpy(pkg1txt, pkg1 + pk1_offset + 0x10, 14);
-        gfx_printf("Unknown pkg1 version\nMake sure you have the latest version of TegraExplorer\n\nPKG1: '%s'\n", pkg1txt);
+        gfx_printf("Unbekannte pkg1 Version\nStelle sicher das du den neuesten TegraExplorer hast\n\nPKG1: '%s'\n", pkg1txt);
         return NULL;
     }
 
