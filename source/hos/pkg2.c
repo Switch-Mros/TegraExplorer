@@ -150,14 +150,14 @@ int pkg2_decompress_kip(pkg2_kip1_info_t* ki, u32 sectsToDecomp)
 		//gfx_printf("Decomping %s KIP1 sect %d of size %d...\n", (const char*)hdr.name, sectIdx, compSize);
 		if (blz_uncompress_srcdest(srcDataPtr, compSize, dstDataPtr, outputSize) == 0)
 		{
-			gfx_printf("%kERROR decomping sect %d of %s KIP!%k\n", 0xFFFF0000, sectIdx, (char*)hdr.name, 0xFFCCCCCC);
+			gfx_printf("%kFEHLER beim Dekompilieren des Sektors %d von %s KIP!%k\n", 0xFFFF0000, sectIdx, (char*)hdr.name, 0xFFCCCCCC);
 			free(newKip);
 
 			return 1;
 		}
 		else
 		{
-			DPRINTF("Done! Decompressed size is %d!\n", outputSize);
+			DPRINTF("Abgeschlossen! Dekomprimierte Groesse ist %d!\n", outputSize);
 		}
 		hdr.sections[sectIdx].size_comp = outputSize;
 		srcDataPtr += compSize;
@@ -196,7 +196,7 @@ pkg2_hdr_t *pkg2_decrypt(void *data)
 
 	for (u32 i = 0; i < 4; i++)
 	{
-DPRINTF("sec %d has size %08X\n", i, hdr->sec_size[i]);
+DPRINTF("Sektor %d ist %08X gross\n", i, hdr->sec_size[i]);
 		if (!hdr->sec_size[i])
 			continue;
 
