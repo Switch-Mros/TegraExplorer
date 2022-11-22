@@ -54,33 +54,33 @@ enum {
 
 MenuEntry_t mainMenuEntries[] = {
     #ifndef SCRIPT_ONLY
-    [MainExplore] = {.optionUnion = COLORTORGB(COLOR_WHITE) | SKIPBIT, .name = "-- Explore --"},
-    [MainBrowseSd] = {.optionUnion = COLORTORGB(COLOR_GREEN), .name = "Browse SD"},
+    [MainExplore] = {.optionUnion = COLORTORGB(COLOR_WHITE) | SKIPBIT, .name = "-- Explorer --"},
+    [MainBrowseSd] = {.optionUnion = COLORTORGB(COLOR_GREEN), .name = "SD durchsuchen"},
     [MainMountSd] = {.optionUnion = COLORTORGB(COLOR_YELLOW)}, // To mount/unmount the SD
-    [MainBrowseEmmc] = {.optionUnion = COLORTORGB(COLOR_BLUE), .name = "Browse EMMC"},
-    [MainBrowseEmummc] = {.optionUnion = COLORTORGB(COLOR_BLUE), .name = "Browse EMUMMC"},
+    [MainBrowseEmmc] = {.optionUnion = COLORTORGB(COLOR_BLUE), .name = "EMMC durchsuchen"},
+    [MainBrowseEmummc] = {.optionUnion = COLORTORGB(COLOR_BLUE), .name = "EMUMMC durchsuchen"},
     [MainTools] = {.optionUnion = COLORTORGB(COLOR_WHITE) | SKIPBIT, .name = "\n-- Tools --"},
-    [MainPartitionSd] = {.optionUnion = COLORTORGB(COLOR_ORANGE), .name = "Partition the sd"},
-    [MainViewKeys] = {.optionUnion = COLORTORGB(COLOR_YELLOW), .name = "View dumped keys"},
-    [MainViewCredits] = {.optionUnion = COLORTORGB(COLOR_YELLOW), .name = "Credits"},
-    [MainExit] = {.optionUnion = COLORTORGB(COLOR_WHITE) | SKIPBIT, .name = "\n-- Exit --"},
+    [MainPartitionSd] = {.optionUnion = COLORTORGB(COLOR_ORANGE), .name = "SD-Karte partitionieren"},
+    [MainViewKeys] = {.optionUnion = COLORTORGB(COLOR_YELLOW), .name = "Ausgelesene Keys anschauen"},
+    [MainViewCredits] = {.optionUnion = COLORTORGB(COLOR_YELLOW), .name = "Ueber"},
+    [MainExit] = {.optionUnion = COLORTORGB(COLOR_WHITE) | SKIPBIT, .name = "\n-- Beenden --"},
     #else 
-    [MainExit] = {.optionUnion = COLORTORGB(COLOR_WHITE), .name = "\n-- Exit --"},
+    [MainExit] = {.optionUnion = COLORTORGB(COLOR_WHITE), .name = "\n-- Beenden --"},
     #endif
-    [MainPowerOff] = {.optionUnion = COLORTORGB(COLOR_VIOLET), .name = "Power off"},
+    [MainPowerOff] = {.optionUnion = COLORTORGB(COLOR_VIOLET), .name = "Ausschalten"},
     // [MainRebootAMS] = {.optionUnion = COLORTORGB(COLOR_VIOLET), .name = "Reboot to hekate"},
     // [MainRebootRCM] = {.optionUnion = COLORTORGB(COLOR_VIOLET), .name = "Reboot to RCM"},
     // [MainRebootNormal] = {.optionUnion = COLORTORGB(COLOR_VIOLET), .name = "Reboot normally"},
-    [MainRebootHekate] = {.optionUnion = COLORTORGB(COLOR_VIOLET), .name = "Reboot to hekate"},
-    [MainReloadTE] = {.optionUnion = COLORTORGB(COLOR_VIOLET), .name = "Reload TegraExplorer"},
-    [MainScripts] = {.optionUnion = COLORTORGB(COLOR_WHITE) | SKIPBIT, .name = "\n-- Scripts --"}
+    [MainRebootHekate] = {.optionUnion = COLORTORGB(COLOR_VIOLET), .name = "Neustart in hekate"},
+    [MainReloadTE] = {.optionUnion = COLORTORGB(COLOR_VIOLET), .name = "TegraExplorer neu laden"},
+    [MainScripts] = {.optionUnion = COLORTORGB(COLOR_WHITE) | SKIPBIT, .name = "\n-- Scripte --"}
 };
 
 void HandleSD(){
     gfx_clearscreen();
     TConf.curExplorerLoc = LOC_SD;
     if (!sd_mount() || sd_get_card_removed()){
-        gfx_printf("Sd is not mounted!");
+        gfx_printf("SD-Karte ist nicht gemounted!");
         hidWait();
     }
     else
@@ -106,7 +106,7 @@ void ViewKeys(){
     PrintKey(dumpedKeys.master_key, AES_128_KEY_SIZE);
     gfx_printf("\nHeader key:   ");
     PrintKey(dumpedKeys.header_key, AES_128_KEY_SIZE * 2);
-    gfx_printf("\nSave mac key: ");
+    gfx_printf("\nSichere mac key: ");
     PrintKey(dumpedKeys.save_mac_key, AES_128_KEY_SIZE);
 
     u8 fuseCount = 0;
@@ -115,17 +115,17 @@ void ViewKeys(){
             fuseCount++;
     }
 
-    gfx_printf("\n\nPkg1 ID: '%s' (kb %d)\nFuse count: %d", TConf.pkg1ID, TConf.pkg1ver, fuseCount);
+    gfx_printf("\n\nPkg1 ID: '%s' (kb %d)\nFuse Zaehler: %d", TConf.pkg1ID, TConf.pkg1ver, fuseCount);
 
     hidWait();
 }
 
 void ViewCredits(){
     gfx_clearscreen();
-    gfx_printf("\nTegraexplorer v%d.%d.%d.%d\nBy SuchMemeManySkill\n\nBased on Lockpick_RCM & Hekate, from shchmue & CTCaer\n\n\n", LP_VER_MJ, LP_VER_MN, LP_VER_BF, LP_VER_KEF);
+    gfx_printf("\nTegraexplorer v%d.%d.%d.%d\nVon SuchMemeManySkill (Uebersetzt von Switch Bros.)\n\nBasierend auf Lockpick_RCM & Hekate, von shchmue & CTCaer\n\n\n", LP_VER_MJ, LP_VER_MN, LP_VER_BF, LP_VER_KEF);
 
     if (hidRead()->r)
-        gfx_printf("%k\"I'm not even sure if it works\" - meme", COLOR_ORANGE);
+        gfx_printf("%k\"Ich bin mir nicht mal sicher ob es funktioniert\" - meme", COLOR_ORANGE);
 
     hidWait();
 }

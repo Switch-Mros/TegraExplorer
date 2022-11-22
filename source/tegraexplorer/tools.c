@@ -49,23 +49,23 @@ void DumpSysFw(){
 
 	gfx_clearscreen();
 
-	gfx_printf("Pkg1 id: '%s', kb %d\n", TConf.pkg1ID, TConf.pkg1ver);
+	gfx_printf("Pkg1 ID: '%s', kb %d\n", TConf.pkg1ID, TConf.pkg1ver);
 	if (FileExists(baseSdPath)){
 		SETCOLOR(COLOR_ORANGE, COLOR_DEFAULT);
-		gfx_printf("Destination already exists. Replace?   ");
+		gfx_printf("Ziel existiert bereits. Ersetzen?   ");
 		if (!MakeYesNoHorzMenu(3, COLOR_DEFAULT)){
 			free(baseSdPath);
 			return;
 		}
 		RESETCOLOR;
-		gfx_printf("\nDeleting... ");
+		gfx_printf("\nLoesche... ");
 		FolderDelete(baseSdPath);
 		gfx_putc('\n');
 	}
 
 	f_mkdir(baseSdPath);
 
-	gfx_printf("Out: %s\nReading entries...\n", baseSdPath);
+	gfx_printf("Out: %s\nLese Eintraege...\n", baseSdPath);
 	int readRes = 0;
 	Vector_t fileVec = ReadFolder("bis:/Contents/registered", &readRes);
 	if (readRes){
@@ -74,7 +74,7 @@ void DumpSysFw(){
 		return;
 	}
 
-	gfx_printf("Starting dump...\n");
+	gfx_printf("Starte Dump...\n");
 	SETCOLOR(COLOR_GREEN, COLOR_DEFAULT);
 
 	int res = 0;
@@ -109,10 +109,10 @@ void DumpSysFw(){
 	RESETCOLOR;
 
 	if (res){
-		gfx_printf("\nDump failed...\n");
+		gfx_printf("\nDump fehlgeschlagen...\n");
 	}
 
-	gfx_printf("\n\nDone! Time taken: %ds\nPress any key to exit", get_tmr_s() - timer);
+	gfx_printf("\n\nAbgeschlossen! Benötigte Zeit: %ds\nBeliebige Taste zum Beenden", get_tmr_s() - timer);
 	free(baseSdPath);
 	hidWait();
 }
@@ -121,9 +121,9 @@ extern sdmmc_storage_t sd_storage;
 extern bool is_sd_inited;
 
 MenuEntry_t FatAndEmu[] = {
-	{.optionUnion = COLORTORGB(COLOR_ORANGE), .name = "Back to main menu"},
+	{.optionUnion = COLORTORGB(COLOR_ORANGE), .name = "Zurueck zum Hauptmenue"},
 	{.optionUnion = COLORTORGB(COLOR_GREEN), .name = "Fat32 + EmuMMC"},
-	{.optionUnion = COLORTORGB(COLOR_BLUE), .name = "Only Fat32"}
+	{.optionUnion = COLORTORGB(COLOR_BLUE), .name = "Nur Fat32"}
 };
 
 void FormatSD(){
@@ -136,7 +136,7 @@ void FormatSD(){
 	if (!is_sd_inited || sd_get_card_removed())
 		return;
 
-	gfx_printf("\nDo you want to partition for an emummc?\n");
+	gfx_printf("\nMoechtest du fuer ein emuMMC partitionieren?\n");
 	res = MakeHorizontalMenu(FatAndEmu, ARR_LEN(FatAndEmu), 3, COLOR_DEFAULT, 0);
 	
 	if (!res)
@@ -149,7 +149,7 @@ void FormatSD(){
 	plist[0] = sd_storage.csd.capacity;
 	if (emummc){
 		if (plist[0] < 83886080){
-            gfx_printf("\n\nYou seem to be running this on a 32GB or smaller SD\nNot enough free space for emummc!");
+            gfx_printf("\n\nEs scheint du fuehrst es auf einer 32GB oder noch kleineren SD-Karte aus\nNicht genug freier Speicher fuer emuMMC!");
 			hidWait();
 			return;
         }
@@ -159,27 +159,27 @@ void FormatSD(){
 		plist[0] = allignedSectors;
 	}
 
-	gfx_printf("\n\nAre you sure you want to format your sd?\nThis will delete everything on your SD card!\nThis action is irreversible!\n\n");
+	gfx_printf("\n\nBist du sicher das du deine SD-Karte formatieren willst?\nAlles auf der SD-Karte wird geloescht!\nDiese Aktion kann nicht Rueckgaengig gemacht werden!\n\n");
 	WaitFor(1500);
 
-	gfx_printf("%kAre you sure?   ", COLOR_WHITE);
+	gfx_printf("%kBist du sicher?   ", COLOR_WHITE);
 	if (!MakeYesNoHorzMenu(3, COLOR_DEFAULT)){
 		return;
 	}
 
 	RESETCOLOR;
 
-	gfx_printf("\n\nStarting Partitioning & Formatting\n");
+	gfx_printf("\n\nStarte Partitionierung & Formatierung\n");
 
 	for (int i = 0; i < 2; i++){
-		gfx_printf("Part %d: %dKiB\n", i + 1, plist[i] / 2);
+		gfx_printf("Teil %d: %dKiB\n", i + 1, plist[i] / 2);
 	}
 
 	u8 *work = malloc(TConf.FSBuffSize);
 	res = f_fdisk_mod(0, plist, work);
 
 	if (!res){
-		res = f_mkfs("sd:", FM_FAT32, 32768, work, TConf.FSBuffSize);
+		res = f_mkfs("SD:", FM_FAT32, 32768, work, TConf.FSBuffSize);
 	}
 
 	sd_unmount();
@@ -187,11 +187,11 @@ void FormatSD(){
 	if (res){
 		DrawError(newErrCode(res));
 		gfx_clearscreen();
-		gfx_printf("Something went wrong\nPress any key to exit");
+		gfx_printf("Etwas ist schiefgelaufen\nBeliebige Taste zum Beenden");
 	}
 	else {
 		sd_mount();
-		gfx_printf("\nDone!\nPress any key to exit");
+		gfx_printf("\nAbgeschlossen!\nBeliebige Taste zum Beenden");
 	}
 
 	free(work);
