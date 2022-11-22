@@ -15,16 +15,16 @@
 #include "../fscopy.h"
 
 MenuEntry_t FolderMenuEntries[] = {
-    {.optionUnion = COLORTORGB(COLOR_WHITE) | SKIPBIT, .name = "-- Folder menu --"},
+    {.optionUnion = COLORTORGB(COLOR_WHITE) | SKIPBIT, .name = "-- Ordnermenue --"},
     {.optionUnion = COLORTORGB(COLOR_GREEN) | SKIPBIT}, // For the file name and size
     {.optionUnion = COLORTORGB(COLOR_VIOLET) | SKIPBIT}, // For the file Attribs
     {.optionUnion = HIDEBIT},
-    {.optionUnion = COLORTORGB(COLOR_WHITE), .name = "<- Back"},
-    {.optionUnion = COLORTORGB(COLOR_BLUE), .name = "\nCopy to clipboard"},
-    {.optionUnion = COLORTORGB(COLOR_BLUE), .name = "Move to clipboard"},
-    {.optionUnion = COLORTORGB(COLOR_BLUE), .name = "Rename current folder\n"},
-    {.optionUnion = COLORTORGB(COLOR_RED), .name = "Delete current folder"},
-    {.optionUnion = COLORTORGB(COLOR_GREEN), .name = "\nCreate folder"}
+    {.optionUnion = COLORTORGB(COLOR_WHITE), .name = "<- Zurueck"},
+    {.optionUnion = COLORTORGB(COLOR_BLUE), .name = "\nIn Zwischenablage kopieren"},
+    {.optionUnion = COLORTORGB(COLOR_BLUE), .name = "In Zwischenablage verschieben"},
+    {.optionUnion = COLORTORGB(COLOR_BLUE), .name = "Aktuellen Ordner umbenennen\n"},
+    {.optionUnion = COLORTORGB(COLOR_RED), .name = "Aktuellen Ordner loeschen"},
+    {.optionUnion = COLORTORGB(COLOR_GREEN), .name = "\nOrdner erstellen"}
 };
 
 int UnimplementedFolderException(const char *path){
@@ -45,13 +45,13 @@ int FolderMoveClipboard(const char *path){
 int DeleteFolder(const char *path){
     gfx_con_setpos(384 + 16, 200 + 16 + 10 * 16);
     SETCOLOR(COLOR_RED, COLOR_DARKGREY);
-    gfx_printf("Are you sure?        ");
+    gfx_printf("Bist du sicher?        ");
 
     WaitFor(1000);
     if (MakeYesNoHorzMenu(3, COLOR_DARKGREY)){
         gfx_clearscreen();
         SETCOLOR(COLOR_RED, COLOR_DEFAULT);
-        gfx_printf("\nDeleting... ");
+        gfx_printf("\nLoesche... ");
         ErrCode_t err = FolderDelete(path);
         if (err.err){
             DrawError(err);
@@ -85,7 +85,7 @@ int RenameFolder(const char *path){
 int CreateFolder(const char *path){
     gfx_clearscreen();
 
-    char *create = ShowKeyboard("New Folder", true);
+    char *create = ShowKeyboard("Neuer Ordner", true);
     if (create == NULL || !(*create)) // smol memory leak but eh
         return 0;
     
@@ -111,7 +111,7 @@ int FolderMenu(const char *path){
 
     char attribs[16];
     char *attribList = GetFileAttribs(file);
-    s_printf(attribs, "Attribs:%s\n", attribList);
+    s_printf(attribs, "Attribute:%s\n", attribList);
     free(attribList);
     FolderMenuEntries[2].name = attribs;
 

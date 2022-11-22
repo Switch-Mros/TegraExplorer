@@ -19,8 +19,8 @@
 MenuEntry_t topEntries[] = {
     {.optionUnion = COLORTORGB(COLOR_GREEN) | SKIPBIT},
     {.optionUnion = COLORTORGB(COLOR_ORANGE)},
-    {.optionUnion = COLORTORGB(COLOR_GREY) | SKIPBIT, .name = "Clipboard -> Current folder"},
-    {.optionUnion = COLORTORGB(COLOR_ORANGE), .name = "Current folder options"}
+    {.optionUnion = COLORTORGB(COLOR_GREY) | SKIPBIT, .name = "Zwischenablage -> Aktueller Ordner"},
+    {.optionUnion = COLORTORGB(COLOR_ORANGE), .name = "Optionen fuer aktuellen Ordner"}
 };
 
 MenuEntry_t MakeMenuOutFSEntry(FSEntry_t entry){
@@ -42,10 +42,10 @@ void FileExplorer(char *path){
 
     while (1){
         topEntries[2].optionUnion = (TConf.explorerCopyMode != CMODE_None) ? (COLORTORGB(COLOR_ORANGE)) : (COLORTORGB(COLOR_GREY) | SKIPBIT);
-        topEntries[1].name = (!strcmp(storedPath, path)) ? "<- Exit explorer" : "<- Folder back";
+        topEntries[1].name = (!strcmp(storedPath, path)) ? "<- Explorer beenden" : "<- Ordner zurueck";
 
         gfx_clearscreen();
-        gfx_printf("Loading...\r");
+        gfx_printf("Laden...\r");
 
         int readRes = 0;
         Vector_t fileVec = ReadFolder(storedPath, &readRes);
@@ -99,13 +99,13 @@ void FileExplorer(char *path){
                 else if (TConf.explorerCopyMode == CMODE_Copy) {
                     gfx_clearscreen();
                     RESETCOLOR;
-                    gfx_printf("Hold vol+/- to cancel\nCopying %s... ", filename);
+                    gfx_printf("Halte Vol+/- zum Abbrechen\nKopiere %s... ", filename);
                     err = FileCopy(TConf.srcCopy, dst, COPY_MODE_CANCEL | COPY_MODE_PRINT);
                 }
                 else {
                     gfx_clearscreen();
                     RESETCOLOR;
-                    gfx_printf("\nCopying folder... ");
+                    gfx_printf("\nKopiere Ordner... ");
                     err = FolderCopy(TConf.srcCopy, storedPath);
                 }
             }

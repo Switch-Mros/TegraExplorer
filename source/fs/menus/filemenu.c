@@ -19,18 +19,18 @@
 
 
 MenuEntry_t FileMenuEntries[] = {
-    {.optionUnion = COLORTORGB(COLOR_WHITE) | SKIPBIT, .name = "-- File menu --"},
+    {.optionUnion = COLORTORGB(COLOR_WHITE) | SKIPBIT, .name = "-- Dateimenue --"},
     {.optionUnion = COLORTORGB(COLOR_GREEN) | SKIPBIT}, // For the file name and size
     {.optionUnion = COLORTORGB(COLOR_VIOLET) | SKIPBIT}, // For the file Attribs
     {.optionUnion = HIDEBIT},
-    {.optionUnion = COLORTORGB(COLOR_WHITE), .name = "<- Back"},
-    {.optionUnion = COLORTORGB(COLOR_BLUE), .name = "\nCopy to clipboard"},
-    {.optionUnion = COLORTORGB(COLOR_BLUE), .name = "Move to clipboard"},
-    {.optionUnion = COLORTORGB(COLOR_BLUE), .name = "Rename file\n"},
-    {.optionUnion = COLORTORGB(COLOR_RED), .name = "Delete file"},
-    {.optionUnion = COLORTORGB(COLOR_GREEN), .name = "View hex"},
-    {.optionUnion = COLORTORGB(COLOR_ORANGE), .name = "Launch Payload"},
-    {.optionUnion = COLORTORGB(COLOR_YELLOW), .name = "Launch Script"},
+    {.optionUnion = COLORTORGB(COLOR_WHITE), .name = "<- Zurueck"},
+    {.optionUnion = COLORTORGB(COLOR_BLUE), .name = "\nIn Zwischenablage kopieren"},
+    {.optionUnion = COLORTORGB(COLOR_BLUE), .name = "In Zwischenablage verschieben"},
+    {.optionUnion = COLORTORGB(COLOR_BLUE), .name = "Datei umbenennen\n"},
+    {.optionUnion = COLORTORGB(COLOR_RED), .name = "Datei loeschen"},
+    {.optionUnion = COLORTORGB(COLOR_GREEN), .name = "HEX anzeigen"},
+    {.optionUnion = COLORTORGB(COLOR_ORANGE), .name = "Starte Payload"},
+    {.optionUnion = COLORTORGB(COLOR_YELLOW), .name = "Starte Script"},
 };
 
 
@@ -59,7 +59,7 @@ void MoveClipboard(char *path, FSEntry_t entry){
 void DeleteFile(char *path, FSEntry_t entry){
     gfx_con_setpos(384 + 16, 200 + 16 + 10 * 16);
     SETCOLOR(COLOR_RED, COLOR_DARKGREY);
-    gfx_printf("Are you sure?      ");
+    gfx_printf("Bist du sicher?      ");
     
     WaitFor(500);
     if (!MakeYesNoHorzMenu(3, COLOR_DARKGREY))
@@ -73,7 +73,7 @@ void DeleteFile(char *path, FSEntry_t entry){
 }
 
 void RunScriptString(char *str, u32 size){
-    TConf.scriptCWD = "sd:/";
+    TConf.scriptCWD = "SD:/";
     gfx_clearscreen();
     ParserRet_t ret = parseScript(str, size);
     setStaticVars(&ret.staticVarHolder);
@@ -197,7 +197,7 @@ void FileMenu(char *path, FSEntry_t entry){
     FileMenuEntries[0].sizeUnion = entry.sizeUnion;
     char attribs[16];
     char *attribList = GetFileAttribs(entry);
-    s_printf(attribs, "Attribs:%s\n", attribList);
+    s_printf(attribs, "Attribute:%s\n", attribList);
     free(attribList);
     FileMenuEntries[2].name = attribs;
 
