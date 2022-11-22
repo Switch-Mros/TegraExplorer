@@ -15,9 +15,9 @@ if (fsexists("sd:/switch/prod.keys")) {
 		maj=((ver>>26)&((1<<6)- 1))
 	}.else(){print("Fw not found")pe()}
 	a=0 fwstr()}
-	if(mountsys("SYSTEM")){print("SYSTEM MOUNT FAIL")pe()}
+	if(mountsys("SYSTEM")){print("SYSTEM MOUNTEN FEHLGESCHLAGEN")pe()}
 	fv()
-}.else(){payload("sd:/config/kefir-helper/lockpick_sys.bin")}
+}.else(){payload("sd:/config/switchbros-helper/lockpick_sys.bin")}
 
 fv()
 sysfw=fw
