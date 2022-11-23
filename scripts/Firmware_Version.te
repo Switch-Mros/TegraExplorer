@@ -13,7 +13,7 @@ if (fsexists("sd:/switch/prod.keys")) {
 		pat=((ver>>16)&((1<<4)- 1))
 		min=((ver>>20)&((1<<6)- 1))
 		maj=((ver>>26)&((1<<6)- 1))
-	}.else(){print("Firmware nicht gefunden")pe()}
+	}.else(){print("Fw not found")pe()}
 	a=0 fwstr()}
 	if(mountsys("SYSTEM")){print("SYSTEM MOUNTEN FEHLGESCHLAGEN")pe()}
 	fv()
@@ -21,6 +21,6 @@ if (fsexists("sd:/switch/prod.keys")) {
 
 fv()
 sysfw=fw
-p("sysMMC Firmware ist",fw)
-if (emu()){if(!mountemu("SYSTEM")){fv()emufw=fw p("emuMMC Firmware ist",fw)}}
+p("Sys'  fw is",fw)
+if (emu()){if(!mountemu("SYSTEM")){fv()emufw=fw p("Emu's fw is",fw)}}
 pause()
