@@ -326,11 +326,11 @@ static void _ums_transfer_start(usbd_gadget_ums_t *ums, bulk_ctxt_t *bulk_ctxt, 
 
 		if (bulk_ctxt->bulk_in_status == USB_ERROR_XFER_ERROR)
 		{
-			ums->set_text(ums->label, "#FFDD00 Error:# EP IN transfer!");
+			ums->set_text(ums->label, "#FFDD00 Fehler:# EP IN Transfer!");
 			ums_flush_endpoint(bulk_ctxt->bulk_in);
 		}
 		else if (bulk_ctxt->bulk_in_status == USB2_ERROR_XFER_NOT_ALIGNED)
-			ums->set_text(ums->label, "#FFDD00 Error:# EP IN Buffer not aligned!");
+			ums->set_text(ums->label, "#FFDD00 Fehler:# EP IN Buffer nicht zugewiesen!");
 
 		if (sync_timeout)
 			bulk_ctxt->bulk_in_buf_state = BUF_STATE_EMPTY;
@@ -343,11 +343,11 @@ static void _ums_transfer_start(usbd_gadget_ums_t *ums, bulk_ctxt_t *bulk_ctxt, 
 
 		if (bulk_ctxt->bulk_out_status == USB_ERROR_XFER_ERROR)
 		{
-			ums->set_text(ums->label, "#FFDD00 Error:# EP OUT transfer!");
+			ums->set_text(ums->label, "#FFDD00 Fehler:# EP OUT Transfer!");
 			ums_flush_endpoint(bulk_ctxt->bulk_out);
 		}
 		else if (bulk_ctxt->bulk_out_status == USB2_ERROR_XFER_NOT_ALIGNED)
-			ums->set_text(ums->label, "#FFDD00 Error:# EP OUT Buffer not aligned!");
+			ums->set_text(ums->label, "#FFDD00 Fehler:# EP OUT Buffer nicht zugewiesen!");
 
 		if (sync_timeout)
 			bulk_ctxt->bulk_out_buf_state = BUF_STATE_FULL;
@@ -362,7 +362,7 @@ static void _ums_transfer_out_big_read(usbd_gadget_ums_t *ums, bulk_ctxt_t *bulk
 
 		if (bulk_ctxt->bulk_out_status == USB_ERROR_XFER_ERROR)
 		{
-			ums->set_text(ums->label, "#FFDD00 Error:# EP OUT transfer!");
+			ums->set_text(ums->label, "#FFDD00 Fehler:# EP OUT Transfer!");
 			ums_flush_endpoint(bulk_ctxt->bulk_out);
 		}
 
@@ -378,7 +378,7 @@ static void _ums_transfer_finish(usbd_gadget_ums_t *ums, bulk_ctxt_t *bulk_ctxt,
 
 		if (bulk_ctxt->bulk_in_status == USB_ERROR_XFER_ERROR)
 		{
-			ums->set_text(ums->label, "#FFDD00 Error:# EP IN transfer!");
+			ums->set_text(ums->label, "#FFDD00 Fehler:# EP IN Transfer!");
 			ums_flush_endpoint(bulk_ctxt->bulk_in);
 		}
 
@@ -391,7 +391,7 @@ static void _ums_transfer_finish(usbd_gadget_ums_t *ums, bulk_ctxt_t *bulk_ctxt,
 
 		if (bulk_ctxt->bulk_out_status == USB_ERROR_XFER_ERROR)
 		{
-			ums->set_text(ums->label, "#FFDD00 Error:# EP OUT transfer!");
+			ums->set_text(ums->label, "#FFDD00 Fehler:# EP OUT Transfer!");
 			ums_flush_endpoint(bulk_ctxt->bulk_out);
 		}
 
@@ -461,7 +461,7 @@ static int _scsi_read(usbd_gadget_ums_t *ums, bulk_ctxt_t *bulk_ctxt)
 	}
 	if (lba_offset >= ums->lun.num_sectors)
 	{
-		ums->set_text(ums->label, "#FF8000 Warn:# Read - Out of range! Host notified.");
+		ums->set_text(ums->label, "#FF8000 Warnung:# Lesen - Ausserhalb der Reichweite! Host informiert.");
 		ums->lun.sense_data = SS_LOGICAL_BLOCK_ADDRESS_OUT_OF_RANGE;
 
 		return UMS_RES_INVALID_ARG;
@@ -512,7 +512,7 @@ static int _scsi_read(usbd_gadget_ums_t *ums, bulk_ctxt_t *bulk_ctxt)
 		// If an error occurred, report it and its position.
 		if (!amount)
 		{
-			ums->set_text(ums->label, "#FFDD00 Error:# SDMMC Read!");
+			ums->set_text(ums->label, "#FFDD00 Fehler:# SDMMC lesen!");
 			ums->lun.sense_data = SS_UNRECOVERED_READ_ERROR;
 			ums->lun.sense_data_info = lba_offset;
 			ums->lun.info_valid = 1;
@@ -550,7 +550,7 @@ static int _scsi_write(usbd_gadget_ums_t *ums, bulk_ctxt_t *bulk_ctxt)
 
 	if (ums->lun.ro)
 	{
-		ums->set_text(ums->label, "#FF8000 Warn:# Write - Read only! Host notified.");
+		ums->set_text(ums->label, "#FF8000 Warnung:# Schreiben - Nur lesen! Host informiert.");
 		ums->lun.sense_data = SS_WRITE_PROTECTED;
 
 		return UMS_RES_INVALID_ARG;
@@ -574,7 +574,7 @@ static int _scsi_write(usbd_gadget_ums_t *ums, bulk_ctxt_t *bulk_ctxt)
 	// Check that starting LBA is not past the end sector offset.
 	if (lba_offset >= ums->lun.num_sectors)
 	{
-		ums->set_text(ums->label, "#FF8000 Warn:# Write - Out of range! Host notified.");
+		ums->set_text(ums->label, "#FF8000 Warnung:# Schreiben - Ausserhalb der Reichweite! Host informiert.");
 		ums->lun.sense_data = SS_LOGICAL_BLOCK_ADDRESS_OUT_OF_RANGE;
 
 		return UMS_RES_INVALID_ARG;
@@ -596,7 +596,7 @@ static int _scsi_write(usbd_gadget_ums_t *ums, bulk_ctxt_t *bulk_ctxt)
 
 			if (usb_lba_offset >= ums->lun.num_sectors)
 			{
-				ums->set_text(ums->label, "#FFDD00 Error:# Write - Past last sector!");
+				ums->set_text(ums->label, "#FFDD00 Fehler:# Schreiben - Hinter dem letzten Sektor!");
 				ums->lun.sense_data = SS_LOGICAL_BLOCK_ADDRESS_OUT_OF_RANGE;
 				ums->lun.sense_data_info = usb_lba_offset;
 				ums->lun.info_valid = 1;
@@ -623,7 +623,7 @@ static int _scsi_write(usbd_gadget_ums_t *ums, bulk_ctxt_t *bulk_ctxt)
 				ums->lun.sense_data = SS_COMMUNICATION_FAILURE;
 				ums->lun.sense_data_info = lba_offset;
 				ums->lun.info_valid = 1;
-				s_printf(txt_buf, "#FFDD00 Error:# Write - Comm failure %d!", bulk_ctxt->bulk_out_status);
+				s_printf(txt_buf, "#FFDD00 Fehler:# Schreiben - Comm failure %d!", bulk_ctxt->bulk_out_status);
 				ums->set_text(ums->label, txt_buf);
 				break;
 			}
@@ -632,7 +632,7 @@ static int _scsi_write(usbd_gadget_ums_t *ums, bulk_ctxt_t *bulk_ctxt)
 
 			if ((ums->lun.num_sectors - lba_offset) < (amount >> UMS_DISK_LBA_SHIFT))
 			{
-				DPRINTF("write %X @ %X beyond end %X\n", amount, lba_offset, ums->lun.num_sectors);
+				DPRINTF("Schreibe %X @ %X Naehe Ende %X\n", amount, lba_offset, ums->lun.num_sectors);
 				amount = (ums->lun.num_sectors - lba_offset) << UMS_DISK_LBA_SHIFT;
 			}
 
@@ -652,7 +652,7 @@ static int _scsi_write(usbd_gadget_ums_t *ums, bulk_ctxt_t *bulk_ctxt)
 				amount >> UMS_DISK_LBA_SHIFT, (u8 *)bulk_ctxt->bulk_out_buf))
 				amount = 0;
 
-DPRINTF("file write %X @ %X\n", amount, lba_offset);
+DPRINTF("Schreibe Datei %X @ %X\n", amount, lba_offset);
 
 			lba_offset           += amount >> UMS_DISK_LBA_SHIFT;
 			amount_left_to_write -= amount;
@@ -661,7 +661,7 @@ DPRINTF("file write %X @ %X\n", amount, lba_offset);
 			// If an error occurred, report it and its position.
 			if (!amount)
 			{
-				ums->set_text(ums->label, "#FFDD00 Error:# SDMMC Write!");
+				ums->set_text(ums->label, "#FFDD00 Fehler:# SDMMC Schreiben!");
 				ums->lun.sense_data = SS_WRITE_ERROR;
 				ums->lun.sense_data_info = lba_offset;
 				ums->lun.info_valid = 1;
@@ -672,7 +672,7 @@ DPRINTF("file write %X @ %X\n", amount, lba_offset);
 			// Did the host decide to stop early?
 			if (bulk_ctxt->bulk_out_length_actual < bulk_ctxt->bulk_out_length)
 			{
-				ums->set_text(ums->label, "#FFDD00 Error:# Empty Write!");
+				ums->set_text(ums->label, "#FFDD00 Fehler:# Schreiben leer!");
 				ums->short_packet_received = 1;
 				break;
 			}
