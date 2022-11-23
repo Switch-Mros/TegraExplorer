@@ -108,7 +108,7 @@ int reboot_to_sept(const u8 *tsec_fw, const u32 tsec_size, const u32 kb)
 	if (!fss0_sept_used)
 	{
 		// Copy sept-primary.
-		if (f_open(&fp, "sd:/sept/sept-primary.bin", FA_READ))
+		if (f_open(&fp, "SD:/sept/sept-primary.bin", FA_READ))
 			goto error;
 
 		if (f_read(&fp, (u8 *)SEPT_STG1_ADDR, f_size(&fp), NULL))
@@ -121,13 +121,13 @@ int reboot_to_sept(const u8 *tsec_fw, const u32 tsec_size, const u32 kb)
 		// Copy sept-secondary.
 		if (kb < KB_FIRMWARE_VERSION_810)
 		{
-			if (f_open(&fp, "sd:/sept/sept-secondary_00.enc", FA_READ))
-				if (f_open(&fp, "sd:/sept/sept-secondary.enc", FA_READ)) // Try the deprecated version.
+			if (f_open(&fp, "SD:/sept/sept-secondary_00.enc", FA_READ))
+				if (f_open(&fp, "SD:/sept/sept-secondary.enc", FA_READ)) // Try the deprecated version.
 					goto error;
 		}
 		else
 		{
-			if (f_open(&fp, "sd:/sept/sept-secondary_01.enc", FA_READ))
+			if (f_open(&fp, "SD:/sept/sept-secondary_01.enc", FA_READ))
 				goto error;
 		}
 
@@ -145,7 +145,7 @@ int reboot_to_sept(const u8 *tsec_fw, const u32 tsec_size, const u32 kb)
 
 	tmp_cfg->boot_cfg |= BOOT_CFG_SEPT_RUN;
 
-	if (f_open(&fp, "sd:/sept/payload.bin", FA_READ | FA_WRITE))
+	if (f_open(&fp, "SD:/sept/payload.bin", FA_READ | FA_WRITE))
 	{
 		free(tmp_cfg);
 		goto error;
