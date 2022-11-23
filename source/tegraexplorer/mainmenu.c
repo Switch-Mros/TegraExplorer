@@ -181,7 +181,7 @@ void EnterMainMenu(){
         #ifndef SCRIPT_ONLY
         // -- Explore --
         mainMenuEntries[MainBrowseSd].hide = !sd_mounted;
-        mainMenuEntries[MainMountSd].name = (sd_mounted) ? "Unmount SD" : "Mount SD";
+        mainMenuEntries[MainMountSd].name = (sd_mounted) ? "SD auswerfen" : "SD einbinden";
         mainMenuEntries[MainBrowseEmummc].hide = (!emu_cfg.enabled || !sd_mounted);
 
         // -- Tools --
