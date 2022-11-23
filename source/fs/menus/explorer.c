@@ -45,7 +45,7 @@ void FileExplorer(char *path){
         topEntries[1].name = (!strcmp(storedPath, path)) ? "<- Explorer beenden" : "<- Ordner zurueck";
 
         gfx_clearscreen();
-        gfx_printf("Laden...\r");
+        gfx_printf("Lade...\r");
 
         int readRes = 0;
         Vector_t fileVec = ReadFolder(storedPath, &readRes);
