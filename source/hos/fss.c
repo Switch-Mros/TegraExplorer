@@ -96,7 +96,7 @@ int parse_fss(launch_ctxt_t *ctxt, const char *path, fss0_sept_t *sept_ctxt)
 
 		LIST_FOREACH_ENTRY(ini_kv_t, kv, &ctxt->cfg->kvs, link)
 		{
-			if (!strcmp("stock", kv->key))
+			if (!strcmp("STOCK", kv->key))
 				if (kv->val[0] == '1')
 					stock = true;
 		}
