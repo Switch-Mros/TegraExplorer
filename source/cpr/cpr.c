@@ -271,7 +271,7 @@ void m_entry_fixArchiveBit(u32 type)
     if (sd_mount())
     {
         // strcpy(path, "/");
-        // strcpy(label, "SD-Karte");
+        // strcpy(label, "SD Card");
         // gfx_printf("Durchlaufe \"%s\"..\nDas kann einige Zeit dauern...\n\n", label);
         // _fix_attributes(path, &total, type, type);
 
@@ -512,7 +512,7 @@ void m_entry_stillNoBootInfo()
 void m_entry_ViewCredits()
 {
     gfx_clearscreen();
-    gfx_printf("\nAllgemeiner Problem Loeser v%d.%d.%d.%d\nVon Team Neptune - (Uebersetzt von Switch Bros.)\n\nBasierend auf TegraExplorer von SuchMemeManySkill,\nLockpick_RCM & Hekate, von shchmue & CTCaer\n\n\n", LP_VER_MJ, LP_VER_MN, LP_VER_BF, LP_VER_KEF);
+    gfx_printf("\nAllgemeiner Problem Loeser v%d.%d.%d.%d\nVon Team Neptune - (Uebersetzt von Switch Bros.)\n\nBasierend auf TegraExplorer von SuchMemeManySkill,\nLockpick_RCM & Hekate, von shchmue & CTCaer\n\n\n", LP_VER_MJ, LP_VER_MN, LP_VER_BF, LP_VER_SB);
 }
 
 void m_entry_fixAll()
