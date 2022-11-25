@@ -105,7 +105,7 @@ int launch_payload(char *path)
 		FIL fp;
 		if (f_open(&fp, path, FA_READ))
 		{
-			EPRINTFARGS("Payload file is missing!\n(%s)", path);
+			EPRINTFARGS("Payload fehlt!\n(%s)", path);
 			sd_unmount();
 
 			return 1;
@@ -307,10 +307,10 @@ void ipl_main()
 			SetKeySlots();
 	}
 
-	if (FileExists("sd:/kefir/switch/kefir-updater/update.te"))
-		RunScript("sd:/kefir/switch/kefir-updater", newFSEntry("update.te"));
-	else if (FileExists("sd:/switch/kefir-updater/update.te"))
-		RunScript("sd:/switch/kefir-updater", newFSEntry("update.te"));
+	if (FileExists("sd:/SwitchBros_BasisPaket/switch/switchbros-updater/update.te"))
+		RunScript("sd:/SwitchBros_BasisPaket/switch/switchbros-updater", newFSEntry("update.te"));
+	else if (FileExists("sd:/switch/switchbros-updater/update.te"))
+		RunScript("sd:/switch/switchbros-updater", newFSEntry("update.te"));
 	else if (FileExists("sd:/startup.te"))
 		RunScript("sd:/", newFSEntry("startup.te"));
 	// else 
