@@ -12,7 +12,7 @@ char *CombinePaths(const char *current, const char *add){
     size_t size = strlen(current) + strlen(add) + 2;
     ret = (char*) malloc (size);
 
-    s_printf(ret, (current[strlen(current) - 1] == '/') ? "%s%s" : "%s/%s", current, add);
+    sprintf(ret, (current[strlen(current) - 1] == '/') ? "%s%s" : "%s/%s", current, add);
 
     return ret;
 }
@@ -47,7 +47,6 @@ char *GetFileAttribs(FSEntry_t entry){
     return ret;
 }
 
-// Returns 1 if a file exists, 0 if it does not
 bool FileExists(const char* path){
     FRESULT fr;
     FILINFO fno;
