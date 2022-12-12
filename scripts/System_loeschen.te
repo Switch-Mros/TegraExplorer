@@ -20,10 +20,10 @@ wait()
 color(0x0000FF)
 p("POWER Taste um alles zu loeschen, jede andere Taste zum Beenden")a=pause()if(!a.power){exit()}clear()
 color(0xFF0000)
-pr("Löschen vom Systemspeicher... ")
+pr("LÃ¶schen vom Systemspeicher... ")
 f=readdir("bis:/save")
 if(f.folders.len()!=0){p("Folders in save dir???")pe()}
-f.files.foreach("x"){if(!is.contains(x)){if(delfile("bis:/save/"+x)){p("Löschen der Datei fehlgeschlagen: ", x)pe()}}}
+f.files.foreach("x"){if(!is.contains(x)){if(delfile("bis:/save/"+x)){p("LÃ¶schen der Datei fehlgeschlagen: ", x)pe()}}}
 pr("Abgeschlossen!\nLoesche Benutzerverzeichnisse...")ud=["Album","Contents","save","saveMeta","temp"]
 if(mount("USER")){p("Einbinden fehlgeschlagen!")pe()}
 ud.foreach("x"){pr("\n"+x,"")if(deldir("bis:/"+x)){p("Loeschen vom Verzeichnis fehlgeschlagen")pe()}mkdir("bis:/"+x)}
