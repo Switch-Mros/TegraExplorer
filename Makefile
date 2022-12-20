@@ -12,7 +12,7 @@ IPL_LOAD_ADDR := 0x40008000
 LPVERSION_MAJOR := 4
 LPVERSION_MINOR := 1
 LPVERSION_BUGFX := 0
-LPVERSION_SB := SB-110
+LPVERSION_SB := 110
 LPVERSION := \"$(LPVERSION_MAJOR).$(LPVERSION_MINOR).$(LPVERSION_BUGFX).$(LPVERSION_SB)\"
 
 ################################################################################
@@ -68,8 +68,8 @@ all: $(OUTPUTDIR)/$(TARGET)_small.bin
 	@if [ ${BIN_SIZE} -gt 126296 ]; then echo "\e[1;33mPayload size exceeds limit!\e[0m"; fi
 	@if [ ${COMPR_BIN_SIZE} -gt 126296 ]; then echo "\e[1;33mCompressed Payload size exceeds limit!\e[0m"; fi
 
-	@cp $(CURDIR)/output/TegraExplorer_small.bin $(CURDIR)/output/bootloader/payloads/TegraExplorer.bin
-	@cp $(CURDIR)/output/TegraExplorer_small.bin $(CURDIR)/output/switch/switchbros-updater/switchbros-updater.bin
+	@cp $(CURDIR)/output/TegraExplorer_small.bin $(CURDIR)/../SwitchBros_BasisPaket/bootloader/payloads/TegraExplorer.bin
+	@cp $(CURDIR)/output/TegraExplorer_small.bin $(CURDIR)/../SwitchBros_BasisPaket/switch/switchbros-updater/switchbros-updater.bin
 
 clean:
 	@rm -rf $(BUILDDIR)
