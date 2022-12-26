@@ -13,7 +13,7 @@ if (fsexists("sd:/switch/prod.keys")) {
 		pat=((ver>>16)&((1<<4)- 1))
 		min=((ver>>20)&((1<<6)- 1))
 		maj=((ver>>26)&((1<<6)- 1))
-	}.else(){print("Fw not found")pe()}
+	}.else(){print("Firmware nicht gefunden")pe()}
 	a=0 fwstr()}
 	if(mountsys("SYSTEM")){print("SYSTEM EINBINDEN FEHLGESCHLAGEN")pe()}
 	fv()

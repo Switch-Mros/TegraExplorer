@@ -34,7 +34,7 @@ if(fsexists(bsp)){p("Verzeichnis existiert bereits! POWER Taste zum ersetzen, je
 mkdir(bsp)
 p("Dumpe nach",bsp)
 con=readdir("bis:/Contents/registered")
-if(con.result!=0){println("Fail reading dir")pe()}
+if(con.result!=0){println("Verzeichnis konnte nicht gelesen werden")pe()}
 c=(con.files.len()+con.folders.len()).str()
 i=1 f=0 t=timer()
 dump={
