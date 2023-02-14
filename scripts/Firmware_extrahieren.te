@@ -51,4 +51,6 @@ dump={
 }
 fi=con.files dump()
 f=1 fi=con.folders dump()
-p("\nAbgeschlossen! Benoetigte Zeit",timer()-t/1000,"s")pause()
+p("\nAbgeschlossen! Benoetigte Zeit",timer()-t/1000,"s")
+p("\nBeliebige Taste druecken zum beenden")
+pause()
