@@ -41,11 +41,11 @@ void DumpSysFw(){
 	}
 
 	baseSdPath = malloc(36 + 16);
-	s_printf(baseSdPath, "SD:/tegraexplorer/Firmware/%d (%s)", TConf.pkg1ver, TConf.pkg1ID);
+	s_printf(baseSdPath, "sd:/tegraexplorer/Firmware/%d (%s)", TConf.pkg1ver, TConf.pkg1ID);
 	int baseSdPathLen = strlen(baseSdPath);
 
-	f_mkdir("SD:/tegraexplorer");
-	f_mkdir("SD:/tegraexplorer/Firmware");
+	f_mkdir("sd:/tegraexplorer");
+	f_mkdir("sd:/tegraexplorer/Firmware");
 
 	gfx_clearscreen();
 
@@ -212,11 +212,11 @@ void TakeScreenshot(){
         return;
 
     char *name, *path;
-    const char basepath[] = "SD:/tegraexplorer/screenshots";
+    const char basepath[] = "sd:/tegraexplorer/screenshots";
     name = malloc(40);
     s_printf(name, "Screenshot_%08X.bmp", get_tmr_us());
 
-    f_mkdir("SD:/tegraexplorer");
+    f_mkdir("sd:/tegraexplorer");
     f_mkdir(basepath);
     path = CombinePaths(basepath, name);
     free(name);

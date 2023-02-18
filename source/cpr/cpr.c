@@ -328,13 +328,13 @@ void m_entry_fixAIOUpdate()
     gfx_clearscreen();
     gfx_printf("\n\n-- Behebe fehlerhaftes AIO-switch-updater Update.\n\n");
 
-    char *aio_fs_path = CpyStr("SD:/atmosphere/fusee-secondary.bin.aio");
-    char *aio_p_path = CpyStr("SD:/sept/payload.bin.aio");
-    char *aio_strt_path = CpyStr("SD:/atmosphere/stratosphere.romfs.aio");
+    char *aio_fs_path = CpyStr("sd:/atmosphere/fusee-secondary.bin.aio");
+    char *aio_p_path = CpyStr("sd:/sept/payload.bin.aio");
+    char *aio_strt_path = CpyStr("sd:/atmosphere/stratosphere.romfs.aio");
 
-    char *o_fs_path = CpyStr("SD:/atmosphere/fusee-secondary.bin");
-    char *o_p_path = CpyStr("SD:/sept/payload.bin");
-    char *o_strt_path = CpyStr("SD:/atmosphere/stratosphere.romfs");
+    char *o_fs_path = CpyStr("sd:/atmosphere/fusee-secondary.bin");
+    char *o_p_path = CpyStr("sd:/sept/payload.bin");
+    char *o_strt_path = CpyStr("sd:/atmosphere/stratosphere.romfs");
 
     if (FileExists(aio_fs_path))
     {
@@ -377,13 +377,13 @@ void m_entry_fixClingWrap()
 {
     gfx_clearscreen();
     gfx_printf("\n\n-- Repariere ClingWrap.\n\n");
-    char *bpath = CpyStr("SD:/_b0otloader");
-    char *bopath = CpyStr("SD:/bootloader");
-    char *kpath = CpyStr("SD:/atmosphere/_k1ps");
-    char *kopath = CpyStr("SD:/atmosphere/kips");
+    char *bpath = CpyStr("sd:/_b0otloader");
+    char *bopath = CpyStr("sd:/bootloader");
+    char *kpath = CpyStr("sd:/atmosphere/_k1ps");
+    char *kopath = CpyStr("sd:/atmosphere/kips");
 
-    char *ppath = CpyStr("SD:/bootloader/_patchesCW.ini");
-    char *popath = CpyStr("SD:/atmosphere/patches.ini");
+    char *ppath = CpyStr("sd:/bootloader/_patchesCW.ini");
+    char *popath = CpyStr("sd:/atmosphere/patches.ini");
 
     if (FileExists(bpath))
     {
@@ -446,16 +446,16 @@ void m_entry_deleteInstalledThemes()
 {
     gfx_clearscreen();
     gfx_printf("\n\n-- Loesche installierte Themes.\n\n");
-    _deleteTheme("SD:/atmosphere/contents", "0100000000001000");
-    _deleteTheme("SD:/atmosphere/contents", "0100000000001007");
-    _deleteTheme("SD:/atmosphere/contents", "0100000000001013");
+    _deleteTheme("sd:/atmosphere/contents", "0100000000001000");
+    _deleteTheme("sd:/atmosphere/contents", "0100000000001007");
+    _deleteTheme("sd:/atmosphere/contents", "0100000000001013");
 }
 
 void m_entry_deleteBootFlags()
 {
     gfx_clearscreen();
     gfx_printf("\n\n-- Aktivierte sysmodule beim Systemstart ausschalten.\n\n");
-    char *storedPath = CpyStr("SD:/atmosphere/contents");
+    char *storedPath = CpyStr("sd:/atmosphere/contents");
     int readRes = 0;
     Vector_t fileVec = ReadFolder(storedPath, &readRes);
     if (readRes)
