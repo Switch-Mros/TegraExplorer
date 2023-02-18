@@ -237,7 +237,7 @@ void ipl_main()
 	heap_init(IPL_HEAP_START);
 
 #ifdef DEBUG_UART_PORT
-	uart_send(DEBUG_UART_PORT, (u8 *)"hekate: Hello!\r\n", 16);
+	uart_send(DEBUG_UART_PORT, (u8 *)"hekate: Hallo!\r\n", 16);
 	uart_wait_idle(DEBUG_UART_PORT, UART_TX_IDLE);
 #endif
 
@@ -292,11 +292,11 @@ void ipl_main()
 	gfx_clearscreen();
 	
 
-	if (FileExists("SD:/switch/prod.keys")){
+	if (FileExists("sd:/switch/prod.keys")){
 		int res = -1;
 
 		if (btn_read() & BTN_VOL_DOWN || DumpKeys())
-			res = GetKeysFromFile("SD:/switch/prod.keys");
+			res = GetKeysFromFile("sd:/switch/prod.keys");
 
 		TConf.keysDumped = (res > 0) ? 0 : 1;
 
@@ -307,17 +307,17 @@ void ipl_main()
 			SetKeySlots();
 	}
 
-	if (FileExists("SD:/SwitchBros_BasisPaket/switch/switchbros-updater/update.te"))
-		RunScript("SD:/SwitchBros_BasisPaket/switch/switchbros-updater", newFSEntry("update.te"));
-	else if (FileExists("SD:/switch/switchbros-updater/update.te"))
-		RunScript("SD:/switch/switchbros-updater", newFSEntry("update.te"));
-	else if (FileExists("SD:/startup.te"))
-		RunScript("SD:/", newFSEntry("startup.te"));
+	if (FileExists("sd:/SwitchBros_BasisPaket/switch/switchbros-updater/update.te"))
+		RunScript("sd:/SwitchBros_BasisPaket/switch/switchbros-updater", newFSEntry("update.te"));
+	else if (FileExists("sd:/switch/switchbros-updater/update.te"))
+		RunScript("sd:/switch/switchbros-updater", newFSEntry("update.te"));
+	else if (FileExists("sd:/startup.te"))
+		RunScript("sd:/", newFSEntry("startup.te"));
 	// else 
 	// 	{
 	// 		gfx_printf("\n\nStartup script nicht gefunden.\nBitte downloade das SwitchBros_BasisPaket neu herunter und installiere es manuell\n\nPower-Taste druecken fuer Neustart...");
 	// 		hidWait()->buttons;
-	// 		launch_payload("SD:/payload.bin");
+	// 		launch_payload("sd:/payload.bin");
 	// 	}
 
 	EnterMainMenu();
