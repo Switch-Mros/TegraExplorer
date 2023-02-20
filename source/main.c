@@ -317,7 +317,7 @@ void ipl_main()
 	// 	{
 	// 		gfx_printf("\n\nStartup script nicht gefunden.\nBitte downloade das SwitchBros_BasisPaket neu herunter und installiere es manuell\n\nPower-Taste druecken fuer Neustart...");
 	// 		hidWait()->buttons;
-	// 		launch_payload("sd:/payload.bin");
+	// 		launch_payload("sd:/SwitchBros_BasisPaket/payload.bin");
 	// 	}
 
 	EnterMainMenu();
