@@ -311,6 +311,8 @@ void ipl_main()
 		RunScript("sd:/SwitchBros_BasisPaket/switch/switchbros-updater", newFSEntry("update.te"));
 	else if (FileExists("sd:/switch/switchbros-updater/update.te"))
 		RunScript("sd:/switch/switchbros-updater", newFSEntry("update.te"));
+	else if (FileExists("sd:/SwitchBros_BasisPaket/switch/switchbrosupdater/startup.te"))
+		RunScript("sd:/SwitchBros_BasisPaket/switch/switchbrosupdater", newFSEntry("startup.te"));
 	else if (FileExists("sd:/startup.te"))
 		RunScript("sd:/", newFSEntry("startup.te"));
 	// else 
