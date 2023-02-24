@@ -12,7 +12,7 @@ pe={pause() exit()}
 color(GELB);
 p("TegraScript Syncfix.te von MezBar");
 p("Portiert zu TegraScript v3 von xHR")
-p("Deutsche Uebersetzung von BeckysFootSlave")
+p("Deutsche Uebersetzung von SwitchBros.")
 p();
 p("Dieses Script behebt JoyCon Syncronisierungsprobleme zwischen sysMMC und emuMMC");
 p();
@@ -30,15 +30,14 @@ p();
 color(WEISS);
 
 p();
-p("Druecke X um WiFi und BLAUtooth Einstellungen vom sysMMC zum emuMMC zu kopieren");
+p("Druecke X um WiFi und Blueooth Einstellungen vom sysMMC zum emuMMC zu kopieren");
 p();
 color(ORANGE);
 p("Beliebige andere Taste zum verlassen");
 p();
 
-
-op=["Exit","Syncronisiere WiFi und BLAUtooth Einstellungen vom sysMMC zum emuMMC"].copy()
-if (emu()){op+"loesche emummc"}
+op=["Exit","Syncronisiere WiFi und Blueooth Einstellungen vom sysMMC zum emuMMC"].copy()
+if (emu()){op+"loesche emuMMC"}
 r=menu(op,0)clear()
 if(r==0){exit()}
 
@@ -57,7 +56,7 @@ copyfile("bis:/save/8000000000000050", "sd:/tegraexplorer/syncfix/backup/8000000
 
 color(LILA);
 p("Einbinden vom emuMMC");
-if(mountemu("SYSTEM")){p("Einbinden fehlgeschlagen!")pe()}
+if(mountemu("SYSTEM")){p("System konnte nicht eingebunden werden!")pe()}
 p("Sichere emuMMC Datei: 8000000000000050 nach sd:/tegraexplorer/syncfix/backup");
 p();
 copyfile("bis:/save/8000000000000050", "sd:/tegraexplorer/syncfix/backup/8000000000000050_emummc_backup");
@@ -75,6 +74,6 @@ p("Jetzt sollten deine Joycons zwischen sysMMC und emuMMC syncronisiert sein");
 p();
 
 color(GELB);
-p("Beliebige Taste zum verlassen");
+p("Druecke eine beliebige Taste um das Skript zu beenden");
 
 pe();

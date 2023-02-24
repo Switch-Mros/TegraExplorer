@@ -15,12 +15,12 @@ if (fsexists("sd:/switch/prod.keys")) {
 		maj=((ver>>26)&((1<<6)- 1))
 	}.else(){print("Firmware nicht gefunden")pe()}
 	a=0 fwstr()}
-	if(mountsys("SYSTEM")){print("SYSTEM EINBINDEN FEHLGESCHLAGEN")pe()}
+	if(mountsys("SYSTEM")){print("SYSTEM KONNTE NICHT EINGEBUNDEN WERDEN")pe()}
 	fv()
 }.else(){payload("sd:/config/switchbros-helper/lockpick_sys.bin")}
 
 fv()
 sysfw=fw
-p("sysMMC Firmware ist",fw)
-if (emu()){if(!mountemu("SYSTEM")){fv()emufw=fw p("emuMMC Firmware ist",fw)}}
+p("sysMMC Firmware:",fw)
+if (emu()){if(!mountemu("SYSTEM")){fv()emufw=fw p("emuMMC Firmware:",fw)}}
 pause()
