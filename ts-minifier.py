@@ -152,7 +152,7 @@ def minify(script: Code, userobjects, usages):
     # minus the amount of characters it would take to define an alias (len(alias)+len(func)+2), with the 2 being for the
     # equals and the whitespace needed for a definition
     # the same principle also applies to introducing a variable for string literals, though since a literal requires
-	# having "s around it then it's uses*(len(str)+2) - (len(minName)+len(str)+4) instead
+    # having "s around it then it's uses*(len(str)+2) - (len(minName)+len(str)+4) instead
     #                                                                          ^ 2 for = and whitespace, 2 for ""
     #
     # obviously for a rename you're already defining it so it's just the difference between lengths multiplied by uses
@@ -266,7 +266,7 @@ def minify(script: Code, userobjects, usages):
     logging.info("Introducing variables for reused literals" if auto_replace else
                  "Checking for reused literals")
     for string in str_reuse:
-	    if string == '"BYTE[]"':
+        if string == '"BYTE[]"':
             # the type specifier for byte arrays is special because it has to be a literal
             # if it's a variable then it tries to treat it as a string array then shits the bed if the other items are not strings
             continue
