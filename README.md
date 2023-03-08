@@ -1,7 +1,7 @@
 # TegraExplorer
 
 [![TegraExplorer](https://img.shields.io/github/checks-status/Switch-Bros/TegraExplorer/master?label=TegraExplorer&style=plastic)](https://github.com/Switch-Bros/TegraExplorer)
-[![Downloads](https://img.shields.io/github/downloads/Switch-Bros/TegraExplorer/total?label=Alle%20Downloads&style=plastic)](https://github.com/Switch-Bros/TegraExplorer/releases)
+[![Downloads](https://img.shields.io/github/downloads/Switch-Bros/TegraExplorer/total?label=Downloads%20Insgesamt&style=plastic)](https://github.com/Switch-Bros/TegraExplorer/releases)
 [![Version](https://img.shields.io/github/v/release/Switch-Bros/TegraExplorer?style=plastic)](https://github.com/Switch-Bros/TegraExplorer/releases)
 [![Donations](https://img.shields.io/badge/Support%20on-Ko--Fi-red?style=plastic)](https://ko-fi.com/suchmememanyskill)
 
