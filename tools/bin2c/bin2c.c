@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <fcntl.h>
 #include <ctype.h>
 #include <unistd.h>
 
@@ -33,39 +34,32 @@ main ( int argc, char* argv[] )
 {
   unsigned char buf[BUFSIZ];
   char* ident;
-  FILE *fd;
-  size_t size, i, total, blksize = BUFSIZ;
-  int need_comma = 0;
+  int fd, i, total, rd, need_comma;
 
-  if ( argc != 2 )
+  if ( argc < 2 )
   {
     fprintf ( stderr, "Usage: %s binary_file > output_file\n", argv[0] );
     return -1;
   }
 
-  fd = fopen ( argv[1], "rb" );
-  if ( fd == NULL )
+  fd = open ( argv[1], O_RDONLY );
+  if ( fd == -1 )
   {
     fprintf ( stderr, "%s: can't open %s for reading\n", argv[0], argv[1] );
     return -1;
   }
 
-  fseek(fd, 0, SEEK_END);
-  size = ftell(fd);
-  rewind(fd);
-
-  ident = make_ident ( argv[1] );
+  ident = make_ident ( (argc > 2) ? argv[2] : argv[1] );
 
   printf ( "static const unsigned char __attribute__((section (\"._%s\"))) %s[] = {", ident, ident );
-  for ( total = 0; total < size; )
+  for ( total = 0, need_comma = 0; ( rd = read ( fd, buf, BUFSIZ ) ) != 0; )
   {
-    if ( size - total < blksize ) blksize = size - total;
-    if ( fread ( buf, 1, blksize, fd ) != blksize )
+    if ( rd == -1 )
     {
       fprintf ( stderr, "%s: file read error\n", argv[0] );
       return -1;
     }
-    for ( i = 0; i < blksize; i++ )
+    for ( i = 0; i < rd; i++ )
     {
       if ( need_comma ) printf ( ", " );
       else need_comma = 1;
@@ -76,7 +70,7 @@ main ( int argc, char* argv[] )
   }
   printf ( "\n};\n" );
 
-  fclose ( fd );
+  close ( fd );
   free ( ident );
 
   return 0;
