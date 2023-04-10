@@ -271,7 +271,7 @@ void m_entry_fixArchiveBit(u32 type)
     if (sd_mount())
     {
         // strcpy(path, "/");
-        // strcpy(label, "SD Card");
+        // strcpy(label, "SD-Karte");
         // gfx_printf("Durchlaufe \"%s\"..\nDas kann einige Zeit dauern...\n\n", label);
         // _fix_attributes(path, &total, type, type);
 
@@ -338,7 +338,7 @@ void m_entry_fixAIOUpdate()
 
     if (FileExists(aio_fs_path))
     {
-        gfx_printf("Von AIO aktualisierte fusee-secondary Datei entdeckt -> ersetze Original\n\n");
+        gfx_printf("Von AIO aktualisierte fusee-secondary erkannt -> ersetze Original\n\n");
         if (FileExists(o_fs_path))
         {
             _DeleteFileSimple(o_fs_path);
@@ -350,7 +350,7 @@ void m_entry_fixAIOUpdate()
 
     if (FileExists(aio_p_path))
     {
-        gfx_printf("Von AIO aktualisierte payload Datei entdeckt -> ersetze Original\n\n");
+        gfx_printf("Von AIO aktualisierte payload erkannt -> ersetze Original\n\n");
         if (FileExists(o_p_path))
         {
             _DeleteFileSimple(o_p_path);
@@ -362,7 +362,7 @@ void m_entry_fixAIOUpdate()
 
     if (FileExists(aio_strt_path))
     {
-        gfx_printf("Von AIO aktualisierte stratosphere Datei entdeckt -> ersetze Original\n\n");
+        gfx_printf("Von AIO aktualisierte stratosphere erkannt -> ersetze Original\n\n");
         if (FileExists(o_strt_path))
         {
             _DeleteFileSimple(o_strt_path);
@@ -376,7 +376,7 @@ void m_entry_fixAIOUpdate()
 void m_entry_fixClingWrap()
 {
     gfx_clearscreen();
-    gfx_printf("\n\n-- Repariere ClingWrap.\n\n");
+    gfx_printf("\n\n-- Repariere SigPatches.\n\n");
     char *bpath = CpyStr("sd:/_b0otloader");
     char *bopath = CpyStr("sd:/bootloader");
     char *kpath = CpyStr("sd:/atmosphere/_k1ps");
@@ -396,7 +396,7 @@ void m_entry_fixClingWrap()
         {
             DrawError(newErrCode(res));
         }
-        gfx_printf("-- Bootloader repariert\n");
+        gfx_printf("-- Bootloader repariert!\n");
     }
 
     if (FileExists(kpath))
@@ -410,7 +410,7 @@ void m_entry_fixClingWrap()
         {
             DrawError(newErrCode(res));
         }
-        gfx_printf("-- kips repariert\n");
+        gfx_printf("-- kips repariert!\n");
     }
 
     if (FileExists(ppath))
@@ -420,7 +420,7 @@ void m_entry_fixClingWrap()
             _DeleteFileSimple(popath);
         }
         _RenameFileSimple(ppath, popath);
-        gfx_printf("-- patches.ini repariert\n");
+        gfx_printf("-- patches.ini repariert!\n");
     }
 
     free(bpath);
@@ -436,7 +436,7 @@ void _deleteTheme(char *basePath, char *folderId)
     char *path = CombinePaths(basePath, folderId);
     if (FileExists(path))
     {
-        gfx_printf("-- Theme gefunden: %s\n", path);
+        gfx_printf("-- Gefundene Themes: %s\n", path);
         FolderDelete(path);
     }
     free(path);
@@ -454,7 +454,7 @@ void m_entry_deleteInstalledThemes()
 void m_entry_deleteBootFlags()
 {
     gfx_clearscreen();
-    gfx_printf("\n\n-- Aktivierte sysmodule beim Systemstart ausschalten.\n\n");
+    gfx_printf("\n\n-- Automatisches starten der sysmodule deaktivieren.\n\n");
     char *storedPath = CpyStr("sd:/atmosphere/contents");
     int readRes = 0;
     Vector_t fileVec = ReadFolder(storedPath, &readRes);
@@ -503,7 +503,7 @@ void m_entry_stillNoBootInfo()
     gfx_printf("Entferne sie und starte neu.\n\n");
 
     gfx_printf("%kHast du vor kurzem Atmosphere/SwitchBros. aktualisiert?\n", COLOR_WHITE);
-    gfx_printf("Stecke die SD-Karte in deinen PC, loesche 'atmosphere', 'bootloader' & 'sept' Ordner, lade dein bevorzugtes CFW runter und pack die Dateien auf die SD-Karte.\nEinfacher ist es das SwitchBros. Paket herunterzuladen, die SD-Karte in den PC stecken, und dann 'NUR' das 'SwitchBros-SD-Werkzeug.bat' auszufuehren.\n\n");
+    gfx_printf("Stecke die SD-Karte in deinen PC, loesche 'atmosphere', 'bootloader' & 'sept' Ordner, lade dein bevorzugtes CFW runter und pack die Dateien auf die SD-Karte.\nEinfacher ist es mit unserem SwitchBros. Paket!\nWir bieten dir gerne Hilfe auf unserem SwitchBros. Discord Server an. https://discord.gg/switchbros\n\n");
 
     gfx_printf("%kHast du eine neue SD-Karte gekauft?\n", COLOR_WHITE);
     gfx_printf("Vergewissere dich das es keine 'fake' Karte ist.\n\n");
@@ -512,7 +512,7 @@ void m_entry_stillNoBootInfo()
 void m_entry_ViewCredits()
 {
     gfx_clearscreen();
-    gfx_printf("\nAllgemeiner Problem Loeser v%d.%d.%d.%d\nVon Team Neptune - (Uebersetzt von Switch Bros.)\n\nBasierend auf TegraExplorer von SuchMemeManySkill,\nLockpick_RCM & Hekate, von shchmue & CTCaer\n\n\n", LP_VER_MJ, LP_VER_MN, LP_VER_BF, LP_VER_SB);
+    gfx_printf("\nAllgemeinerProblemLoeser v%d.%d.%d.%d\nVon Team Neptune - (Uebersetzt von Switch Bros. und OLED Support hinzugefügt)\n\nBasierend auf TegraExplorer von SuchMemeManySkill,\nLockpick_RCM & Hekate, von shchmue & CTCaer\n\n\n", LP_VER_MJ, LP_VER_MN, LP_VER_BF, LP_VER_SB);
 }
 
 void m_entry_fixAll()
