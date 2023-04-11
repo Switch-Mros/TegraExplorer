@@ -79,7 +79,7 @@ typedef struct _hos_eks_mbr_t
 	hos_eks_bis_keys_t bis_keys[3];
 } hos_eks_mbr_t;
 
-static_assert(sizeof(hos_eks_mbr_t) == 304, "HOS EKS size is wrong!");
+static_assert(sizeof(hos_eks_mbr_t) == 304, "HOS EKS Groesse ist falsch!");
 
 typedef struct _launch_ctxt_t
 {
