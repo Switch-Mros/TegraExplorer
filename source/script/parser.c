@@ -98,7 +98,7 @@ u8 nextToken(char** inPtr, void** val) {
 					}
 
 					if (outdated) {
-						printScriptError(SCRIPT_LEXER_FATAL, "Script requires a newer TegraExplorer version!");
+						printScriptError(SCRIPT_LEXER_FATAL, "Skript benoetigt eine neuere TegraExplorer Version!");
 						return Token_Fatal_Err;
 					}
 				}
@@ -109,7 +109,7 @@ u8 nextToken(char** inPtr, void** val) {
 					u8 minervaEnabled = TConf.minervaEnabled;
 					#endif
 					if (!minervaEnabled) {
-						printScriptError(SCRIPT_LEXER_FATAL, "Extended memory required.\nPut the bootloader folder from hekate on your sd!");
+						printScriptError(SCRIPT_LEXER_FATAL, "Erweiterter Speicher wird benoetigt.\nPack den bootloader Ordner von hekate auf die SD-Karte!");
 						return Token_Fatal_Err;
 					}
 				}
@@ -120,7 +120,7 @@ u8 nextToken(char** inPtr, void** val) {
 					u8 gotKeys = TConf.keysDumped;
 					#endif
 					if (!gotKeys){
-						printScriptError(SCRIPT_LEXER_FATAL, "Keys required.\nMake sure you're on the latest version of TegraExplorer!");
+						printScriptError(SCRIPT_LEXER_FATAL, "Keys benoetigt.\nVergewissere dich das du die neueste Version vom TegraExplorer benutzt!");
 						return Token_Fatal_Err;
 					}
 				}
@@ -131,7 +131,7 @@ u8 nextToken(char** inPtr, void** val) {
 					u8 gotSd = sd_mount();
 					#endif
 					if (!gotSd){
-						printScriptError(SCRIPT_LEXER_FATAL, "Sd required.");
+						printScriptError(SCRIPT_LEXER_FATAL, "SD benoetigt.");
 						return Token_Fatal_Err;
 					}
 				}
@@ -377,7 +377,7 @@ ParserRet_t parseScript(char* in, u32 len) {
 			if (token == Equals && lastOp) {
 				if (lastOp->token == Variable) {
 					if (lastOp->variable.staticVariableSet) {
-						SCRIPT_PARSER_ERR("Trying to assign to a static variable");
+						SCRIPT_PARSER_ERR("Versuche es einer statischen Variable zuzuweisen");
 					}
 					else {
 						setNextActionOperator(&lastFunc->operations, ActionSet, ActionExtraNone, NULL);
@@ -390,7 +390,7 @@ ParserRet_t parseScript(char* in, u32 len) {
 					continue;
 				}
 				else {
-					SCRIPT_PARSER_ERR("Trying to assign to non-object");
+					SCRIPT_PARSER_ERR("Versuche es einem Nicht-Objekt zuzuordnen");
 				}
 			}
 			else if (token == LeftCurlyBracket) {
@@ -414,7 +414,7 @@ ParserRet_t parseScript(char* in, u32 len) {
 
 					if (lastOp && (lastOp->token == Variable || (lastOp->token == CallArgs && !isLastVarSet(lastOp)))) {
 						if (lastOp->token == Variable) {
-							SCRIPT_PARSER_ERR("GET variable before {}");
+							SCRIPT_PARSER_ERR("GET-Variable vor dem {}");
 							continue;
 						}
 
@@ -450,14 +450,14 @@ ParserRet_t parseScript(char* in, u32 len) {
 					op.lineNumber = lineNumber;
 				}
 				else {
-					SCRIPT_PARSER_ERR("Stack count is 1 or state is not a function");
+					SCRIPT_PARSER_ERR("Stapelzahl ist 1 oder Angabe hat keine Funktion");
 				}
 			}
 			else if (token == Dot) {
 				if (lastOp && (lastOp->token == Variable || lastOp->token == BetweenBrackets || (lastOp->token == CallArgs && !isLastVarSet(lastOp)))) {
 					tokenType = nextToken(&in, &var);
 					if (tokenType != Token_Variable) {
-						SCRIPT_PARSER_ERR("Acessing member with non-dynamic token");
+						SCRIPT_PARSER_ERR("Zugriff auf Zugehoerigkeit ohne dynamischem Token");
 					}
 					else {
 						setNextActionOperator(&lastFunc->operations, ActionGet, ActionExtraMemberName, var);
@@ -465,7 +465,7 @@ ParserRet_t parseScript(char* in, u32 len) {
 					}
 				}
 				else {
-					SCRIPT_PARSER_ERR("Member access on non-variable");
+					SCRIPT_PARSER_ERR("Zugehoerigkeitszugriff auf Nicht-Variable");
 				}
 			}
 			else if (token == LeftBracket) {
@@ -504,13 +504,13 @@ ParserRet_t parseScript(char* in, u32 len) {
 							op.token = BetweenBrackets;
 						}
 						else {
-							SCRIPT_PARSER_ERR("Priority brackets can only contain 1 argument");
+							SCRIPT_PARSER_ERR("Vorrangige Klammern koennen nur 1 Argument enthalten");
  						}
 
 					}
 				}
 				else {
-					SCRIPT_PARSER_ERR(") without (");
+					SCRIPT_PARSER_ERR(") ohne (");
 				}
 			}
 			else if (token == LeftSquareBracket) {
@@ -568,7 +568,7 @@ ParserRet_t parseScript(char* in, u32 len) {
 					}
 				}
 				else {
-					SCRIPT_PARSER_ERR("] without [");
+					SCRIPT_PARSER_ERR("] ohne [");
 				}
 			}
 			else if (token == Not) {
@@ -596,7 +596,7 @@ ParserRet_t parseScript(char* in, u32 len) {
 	}
 
 	if (functionStack.count != 1 || stackHistoryHolder.count != 1) {
-		SCRIPT_PARSER_ERR("There seems to be an open bracket somewhere. EOF reached");
+		SCRIPT_PARSER_ERR("Irgendwo scheint es eine offene Klammer zu geben. EOF erreicht");
 	}
 		
 
