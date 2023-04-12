@@ -153,7 +153,7 @@ int emummc_storage_init_mmc(sdmmc_storage_t *storage, sdmmc_t *sdmmc)
 
 		if (f_stat(emu_cfg.emummc_file_based_path, &fno))
 		{
-			EPRINTF("eMMC-Ordner konnte nicht geoeffnet werden.");
+			EPRINTF("EMMC-Ordner konnte nicht geoeffnet werden.");
 			goto out;
 		}
 		f_chmod(emu_cfg.emummc_file_based_path, AM_ARC, AM_ARC);
